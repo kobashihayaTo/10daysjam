@@ -34,9 +34,16 @@ public:
 	///</summary>
 	void Dodge(char* keys, char* oldkeys);
 
+	int Gettrans();
+
 private:
+	VECTOR X;
 
 	VECTOR translation;
+
+	/*int X = 100;
+	int Y = 660;
+	int Z = 0;*/
 
 	float radius = 20.0f;
 	float move = 5;

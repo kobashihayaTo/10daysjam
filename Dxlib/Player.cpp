@@ -8,11 +8,14 @@ void Player::Initialize()
 
 void Player::Update(char* keys, char* oldkeys)
 {
-	if (keys[KEY_INPUT_RIGHT]==1) 
+	X = VGet(translation.x, translation.y, translation.z);
+
+	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	if (key&PAD_INPUT_RIGHT|| keys[KEY_INPUT_RIGHT] == 1)
 	{
 		translation.x += move;
 	}
-	if (keys[KEY_INPUT_LEFT] == 1)
+	if (keys[KEY_INPUT_LEFT] == 1|| key & PAD_INPUT_LEFT)
 	{
 		translation.x -= move;
 	}
@@ -25,19 +28,19 @@ void Player::Draw()
 {
 
 	DrawBox(translation.x+ radius, translation.y+ radius, translation.x - radius, translation.y - radius,GetColor(255, 255, 255), true);
-	DrawFormatString(100, 0, GetColor(255, 255, 255), "ç¿ïW:%f",translation.z);
+	DrawFormatString(100, 0, GetColor(255, 255, 255), "ç¿ïW:%f", translation.z);
 	if (dflag == true)
 	{
-		DrawBox(100, 100, 100,100, GetColor(255, 255, 255), true);
+		DrawCircle(100,100,10, GetColor(255, 255, 255), true);
 	}
 }
 
 void Player::Jamp(char* keys, char* oldkeys)
 {
-
+	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	if (jflag == true) {
 		y_temp = translation.y;
- 		translation.y += (translation.y - y_prev) + 1;
+		translation.y += (translation.y - y_prev) + 1;
 		y_prev = y_temp;
 		//ÇÃÇøÇ…ïœçX----
 		if (translation.y == 660) {
@@ -45,30 +48,32 @@ void Player::Jamp(char* keys, char* oldkeys)
 		}
 		//--------------
 	}
-	if (keys[KEY_INPUT_UP] && jflag == false)
+	if (keys[KEY_INPUT_UP] && jflag == false|| key & PAD_INPUT_1 && jflag == false )
 	{
 		jflag = true;
 		y_prev = translation.y;
-		translation.y = translation.y - jampChange;
+		translation.y= translation.y - jampChange;
 	}
 }
 
 void Player::Dodge(char* keys, char* oldkeys)
 {
-	if (keys[KEY_INPUT_M] == 1 && dflag == false)
+	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	if (keys[KEY_INPUT_C] == 1 && dflag == false || key & PAD_INPUT_4 && dflag == false)
 	{
 		dflag = true;
 	}
-	if (keys[KEY_INPUT_M] == 0&& dflag == true)
+	if (key & PAD_INPUT_4 && dflag == true)
 	{
 		dflag = false;
 		translation.z = 0;
 		move = 5;
 	}
-	if (dflag == true&&translation.z<32)
+	if (dflag == true && translation.z < 32)
 	{
 		translation.z += radius;
 		move = 0;
 	}
 }
 
+int Player::Gettrans() { return translation.x, translation.y, translation.z; }
