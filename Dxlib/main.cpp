@@ -46,6 +46,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	PlayerBullet* playerbullet = new PlayerBullet();
 	playerbullet->Initialize();
+	//シーン用変数
+	int Scene = 0;
 	// 最新のキーボード情報用
 	char keys[256] = {0};
 
@@ -63,13 +65,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
+		switch (Scene)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
 
+		}
 		player_->Update(keys, oldkeys);
-
 		// 描画処理
-
 		player_->Draw();
-		
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
