@@ -1,13 +1,14 @@
 #include "DxLib.h"
 #include "Player.h"
+#include "PlayerBullet.h"
 // ウィンドウのタイトルに表示する文字列
-const char TITLE[] = "LC1B_00_テラオカヨシヒコ: タイトル";
+const char TITLE[] = "LE2C_13_コバシ_ハヤト";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 600;
+const int WIN_WIDTH = 1200;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 400;
+const int WIN_HEIGHT = 720;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
                    _In_ int nCmdShow) {
@@ -40,8 +41,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 	// ゲームループで使う変数の宣言
+	Player* player_ =new Player();
+	player_->Initialize();
 
-	Player* player_ = nullptr;
+	PlayerBullet* playerbullet = new PlayerBullet();
+	playerbullet->Initialize();
 	// 最新のキーボード情報用
 	char keys[256] = {0};
 
@@ -60,8 +64,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 
+		player_->Update(keys, oldkeys);
 
 		// 描画処理
+
+		player_->Draw();
 		
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
