@@ -1,6 +1,5 @@
 #include "DxLib.h"
 #include "Player.h"
-#include "PlayerBullet.h"
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "LE2C_13_コバシ_ハヤト";
 
@@ -44,8 +43,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Player* player_ =new Player();
 	player_->Initialize();
 
-	PlayerBullet* playerbullet = new PlayerBullet();
-	playerbullet->Initialize();
 	//シーン用変数
 	int Scene = 0;
 	// 最新のキーボード情報用

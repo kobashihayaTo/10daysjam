@@ -1,33 +1,32 @@
 #pragma once
 #include "DxLib.h"
 #include "math.h"
-
-#include "Player.h"
 class PlayerBullet
 {
 public:
 	///<summary>
 	///初期化
 	///</summary>
+	///<param name="model">モデル</param>
+	///<param name="textureHandle">テクスチャハンドル</param>
 	void Initialize();
 
 	///<summary>
 	///更新
 	///</summary>
-	void Update(char* keys, char* oldkeys);
+	void Update();
 
 	///<summary>
 	///描画
 	///</summary>
 	void Draw();
 
-
 private:
+	bool aflag = false;
+	float Bulletmove = 0;
 
-	float radius = 10.0f;
-	float Bullet_X = 100.0f;
-	float Bullet_Y = 1000.0f;
-
-	float move = 10;
+	static const int BulletNum = 50;
+	int shot_x[BulletNum];
+	int isShot[BulletNum] = { 0 };
 };
 

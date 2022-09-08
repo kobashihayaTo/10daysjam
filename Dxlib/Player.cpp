@@ -8,6 +8,7 @@ void Player::Initialize()
 
 void Player::Update(char* keys, char* oldkeys)
 {
+
 	X = VGet(translation.x, translation.y, translation.z);
 
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -21,17 +22,22 @@ void Player::Update(char* keys, char* oldkeys)
 	}
 	Dodge(keys, oldkeys);
 	Jamp(keys, oldkeys);
-
+	Attack(keys, oldkeys);
 }
 
 void Player::Draw()
 {
 
 	DrawBox(translation.x+ radius, translation.y+ radius, translation.x - radius, translation.y - radius,GetColor(255, 255, 255), true);
-	DrawFormatString(100, 0, GetColor(255, 255, 255), "ç¿ïW:%f", translation.z);
+	DrawFormatString(100, 0, GetColor(255, 255, 255), "ç¿ïW:%f", translation.x);
 	if (dflag == true)
 	{
 		DrawCircle(100,100,10, GetColor(255, 255, 255), true);
+	}
+
+	if (aflag == true)
+	{
+		DrawCircle(Bulletmove+radius, translation.y, 10, GetColor(255, 0, 0), true);
 	}
 }
 
@@ -55,7 +61,7 @@ void Player::Jamp(char* keys, char* oldkeys)
 		translation.y= translation.y - jampChange;
 	}
 }
-
+//å„âÒÇµ
 void Player::Dodge(char* keys, char* oldkeys)
 {
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -76,4 +82,23 @@ void Player::Dodge(char* keys, char* oldkeys)
 	}
 }
 
-int Player::Gettrans() { return translation.x, translation.y, translation.z; }
+void Player::Attack(char* keys, char* oldkeys)
+{
+	
+
+	if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0)
+	{
+		Bulletmove = translation.x;
+		Bulletmove_Y = translation.y;
+		aflag = true;
+	}
+	if (aflag == true)
+	{
+		Bulletmove += 10;
+		Bulletmove_Y = translation.y;
+	}
+
+
+}
+
+float Player::Gettrans() { return translation.x, translation.y, translation.z; }
