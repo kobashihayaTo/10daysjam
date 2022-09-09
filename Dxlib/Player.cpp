@@ -6,7 +6,7 @@ void Player::Initialize()
 	translation.y = 660;
 }
 
-void Player::Update(char* keys, char* oldkeys)
+void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
 {
 
 	X = VGet(translation.x, translation.y, translation.z);
@@ -25,17 +25,48 @@ void Player::Update(char* keys, char* oldkeys)
 		Lflag = true;
 		translation.x -= move;
 	}
+	if (gameTimer >= 1)
+	{
+		Count += 1;
+		HP_X -= 1.5;
+	}
+	if (Count >= 1)
+	{
+		//プレイヤーが出来次第進める
+		if (HP_X >= 92.5) {
+			bufflag = true;
+			debufflag = false;
+			if (bufflag == true) {
+				//デバフ
+				Attack_level *= 0.5;
+			}
+		}
+		else
+		{
+			debufflag = true;
+			bufflag = false;
+			if (debufflag == true) {
+				//バフ
+				Attack_level *= 2;
+			}
+		}
+	}
+	DrawFormatString(100, 60, GetColor(255, 255, 255), "taima-:%f", gameTimer);
 	Dodge(keys, oldkeys);
 	Jamp(keys, oldkeys);
 	Attack(keys, oldkeys);
+
 }
 
 void Player::Draw()
 {
 
 	DrawBox((int)(translation.x+ radius), (int)(translation.y+ radius), (int)(translation.x - radius), (int)(translation.y - radius),GetColor(255, 255, 255), true);
-	DrawFormatString(100, 0, GetColor(255, 255, 255), "座標:%f", translation.x);
-	DrawFormatString(100, 20, GetColor(255, 255, 255), "座標:%f", Bulletmove_Y);
+	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPバー
+	
+	
+
+	//DrawFormatString(100, 20, GetColor(255, 255, 255), "座標:%f", Bulletmove_Y);
 	if (dflag == true)
 	{
 		DrawCircle(100,100,10, GetColor(255, 255, 255), true);
@@ -162,3 +193,11 @@ void Player::Attack(char* keys, char* oldkeys)
 int Player::Gettrans_X() { return translation.x; }
 
 int Player::Gettrans_Y() { return translation.y; }
+
+int Player::GetHP_X() { return HP_X; }
+
+int Player::GetFlag_b(){return bufflag;}
+
+int Player::GetFlag_de(){return debufflag;}
+
+

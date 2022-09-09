@@ -10,21 +10,21 @@ void System::Initialize()
 	LoadDivGraph("DBuf.png", 3, 3, 1, 32, 32, DEBUF);
 }
 
-void System::Update()
+void System::Update(int HP)
 {
 	gameTimer += 0.05f;
-	if (gameTimer >= 1)
+	if (gameTimer >= 1.05)
 	{
 		gameTimer = 0.0f;
 		gameCount += 1;
-		HP_X-=1.5;
+		HP-=1.5;
 	}
 	if (gameCount >= 1)
 	{
 		//プレイヤーが出来次第進める
-		if (HP_X >= 92.5) {
+		if (HP >= 92.5) {
 			//デバフ
-
+			
 		}
 		else
 		{
@@ -39,7 +39,6 @@ void System::Update()
 
 void System::Draw(int X_,int Y_)
 {
-	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPバー
 	DrawGraph(0, 0, HP_, true);
 
 	if (gameCount >= 1)
@@ -60,7 +59,6 @@ void System::Draw(int X_,int Y_)
 			}
 			//デバフ
 			DrawGraph(X_ - 40, Y_ - 40, DEBUF[AnimetionCount], true);
-
 		}
 		else if(HP_X <= 92.5)
 		{
@@ -81,4 +79,14 @@ void System::Draw(int X_,int Y_)
 			DrawGraph(X_ - 40, Y_ - 40, BUF[AnimetionCount], true);
 		}
 	}
+}
+
+int System::Getcount()
+{
+	return gameCount;
+}
+
+float System::GetgameTimer()
+{
+	return gameTimer;
 }

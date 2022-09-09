@@ -77,8 +77,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		}
-		player_->Update(keys, oldkeys);
-		system_->Update();
+		player_->Update(keys, oldkeys, system_->GetgameTimer() , system_->Getcount());
+		system_->Update(player_->GetHP_X());
 		// •`‰æˆ—
 		player_->Draw();
 		system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y());

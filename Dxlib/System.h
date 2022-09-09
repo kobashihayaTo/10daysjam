@@ -22,10 +22,12 @@ private:
 public:
 
 	void Initialize();
-	void Update();
+	void Update(int HP);
 	void Draw(int X_,int Y_);
 
+	int Getcount();
 
+	float GetgameTimer();
 	
 };
 

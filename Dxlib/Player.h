@@ -17,7 +17,7 @@ public:
 	///<summary>
 	///更新
 	///</summary>
-	void Update(char*keys,char*oldkeys);
+	void Update(char*keys,char*oldkeys,float gameTimer,int Count);
 
 	///<summary>
 	///描画
@@ -43,7 +43,11 @@ public:
 
 	int Gettrans_Y();
 
+	int GetHP_X();
 
+	int GetFlag_b();
+
+	int GetFlag_de();
 
 	//void SetBullet() {
 	//	bullet_->Update();
@@ -63,6 +67,7 @@ private:
 	float move = 5;
 	float GetPlayertrans_ = 100.0f;
 	//--------------------
+	
 	//ジャンプ---------------------
 	bool jflag = false;
 	float y_temp = 0;
@@ -72,8 +77,12 @@ private:
 
 	bool dflag = false;
 	//----------------------------
+	//バフデバフ
+	int Attack_level;
+	int bufflag = false;
+	int debufflag = false;
 	//弾---------------------------
-	bool aflag = false;
+
 	float Bulletmove_X = 0;
 	float Bulletmove_Y = 0;
 	
