@@ -1,10 +1,11 @@
 #include "DxLib.h"
 #include "Player.h"
+#include "System.h"
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "LE2C_13_コバシ_ハヤト";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 1200;
+const int WIN_WIDTH = 1280;
 
 // ウィンドウ縦幅
 const int WIN_HEIGHT = 720;
@@ -38,10 +39,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// 画像などのリソースデータの変数宣言と読み込み
 
-
 	// ゲームループで使う変数の宣言
-	Player* player_ =new Player();
+	Player* player_ = new Player();
 	player_->Initialize();
+
+	System* system_ = new System();
+	system_->Initialize();
 
 	//シーン用変数
 	int Scene = 0;
@@ -75,8 +78,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		}
 		player_->Update(keys, oldkeys);
+		system_->Update();
 		// 描画処理
 		player_->Draw();
+		system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y());
+
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();

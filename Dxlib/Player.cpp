@@ -57,6 +57,9 @@ void Player::Draw()
 			}
 		}
 	}
+
+
+
 }
 
 void Player::Jamp(char* keys, char* oldkeys)
@@ -79,7 +82,9 @@ void Player::Jamp(char* keys, char* oldkeys)
 		translation.y= translation.y - jampChange;
 	}
 }
+
 //Œã‰ñ‚µ
+
 void Player::Dodge(char* keys, char* oldkeys)
 {
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -162,4 +167,6 @@ void Player::Attack(char* keys, char* oldkeys)
 	}
 }
 
-float Player::Gettrans() { return translation.x, translation.y, translation.z; }
+int Player::Gettrans_X() { return translation.x; }
+
+int Player::Gettrans_Y() { return translation.y; }

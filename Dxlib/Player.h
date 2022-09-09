@@ -39,7 +39,11 @@ public:
 	void Attack(char* keys, char* oldkeys);
 
 public:
-	float Gettrans();
+	int Gettrans_X();
+
+	int Gettrans_Y();
+
+
 
 	//void SetBullet() {
 	//	bullet_->Update();
@@ -47,9 +51,12 @@ public:
 
 	VECTOR X;
 
-	VECTOR translation;
+	
 
 private:
+
+	VECTOR translation;
+
 	PlayerBullet* bullet_;
 
 	float radius = 16.0f;
@@ -80,7 +87,14 @@ private:
 	bool Rflag = true;
 	bool Lflag = false;
 
-	
 	int memory_left_Y;
+
+	int HP_X = 200;
+	int HP_Y = 48;
+
+	int HP_;
+	int BUF[3];
+	int DEBUF[3];
+
 };
 
