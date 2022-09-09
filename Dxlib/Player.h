@@ -68,10 +68,13 @@ private:
 	float Bulletmove_Y = 0;
 
 	static const int BulletNum = 50;
+
 	int shot_Right[BulletNum];
 	int shot_Left[BulletNum];
+
 	int isShot_Right[BulletNum];
 	int isShot_Left[BulletNum];
+
 	int bulletCooltime = 0;
 
 	bool Rflag = true;
@@ -79,8 +82,5 @@ private:
 
 	
 	int memory_left_Y;
-
-	int X_;
-	int Y_;
 };
 
