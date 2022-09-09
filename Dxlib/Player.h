@@ -58,32 +58,38 @@ private:
 	VECTOR translation;
 
 	PlayerBullet* bullet_;
-
+	//プレイヤー
 	float radius = 16.0f;
 	float move = 5;
 	float GetPlayertrans_ = 100.0f;
-
+	//--------------------
+	//ジャンプ---------------------
 	bool jflag = false;
 	float y_temp = 0;
 	float y_prev = 0;
 	int jampChange = 25;
 
+
 	bool dflag = false;
-
+	//----------------------------
+	//弾---------------------------
 	bool aflag = false;
-	float Bulletmove = 0;
+	float Bulletmove_X = 0;
 	float Bulletmove_Y = 0;
-
+	
 	static const int BulletNum = 50;
 
-	int shot_Right[BulletNum];
-	int shot_Left[BulletNum];
+	int shot_Right_X[BulletNum];
+	int shot_Right_Y[BulletNum];
+	int shot_Left_X[BulletNum];
+	int shot_Left_Y[BulletNum];
+
 
 	int isShot_Right[BulletNum];
 	int isShot_Left[BulletNum];
 
 	int bulletCooltime = 0;
-
+	//---------------------------
 	bool Rflag = true;
 	bool Lflag = false;
 

@@ -41,23 +41,37 @@ void Player::Draw()
 		DrawCircle(100,100,10, GetColor(255, 255, 255), true);
 	}
 
-	if (Rflag == true) {
-
-		for (int i = 0; i < BulletNum; i++) {
-			if (isShot_Right[i] == 1) {
-				DrawCircle((int)(Bulletmove + radius), Bulletmove_Y, 10, GetColor(255, 0, 0), true);
+	if (Rflag == true || Lflag == true)
+	{
+		for (int i = 0; i < BulletNum; i++)
+		{
+			if (isShot_Right[i] == 1)
+			{
+				shot_Right_X[i] += 20;
+				DrawCircle((int)(shot_Right_X[i] + radius), shot_Right_Y[i], 10, GetColor(255, 0, 0), true);
+			}
+			if (shot_Right_X[i] > 1280)
+			{
+				isShot_Right[i] = 0;
 			}
 		}
 	}
-	if (Lflag == true) {
 
-		for (int i = 0; i < BulletNum; i++) {
-			if (isShot_Left[i] == 1) {
-				DrawCircle((int)(Bulletmove - radius), Bulletmove_Y, 10, GetColor(255, 0, 0), true);
+	if (Lflag == true || Rflag == true)
+	{
+		for (int i = 0; i < BulletNum; i++)
+		{
+			if (isShot_Left[i] == 1)
+			{
+				shot_Left_X[i] -= 20;
+				DrawCircle((int)(shot_Left_X[i] + radius), shot_Left_Y[i], 10, GetColor(255, 0, 0), true);
+			}
+			if (shot_Left_X[i] > 1280)
+			{
+				isShot_Left[i] = 0;
 			}
 		}
 	}
-
 
 
 }
@@ -108,57 +122,35 @@ void Player::Dodge(char* keys, char* oldkeys)
 
 void Player::Attack(char* keys, char* oldkeys)
 {
-
-	for (int i = 0; i < BulletNum; i++) {
-		if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && bulletCooltime == 0 && Rflag == true)
-		{
-			aflag = true;
-			if (aflag == true) {
-				Bulletmove = translation.x;
-				Bulletmove_Y = translation.y;
-				if (isShot_Right[i] == 0)
-				{
-					shot_Right[i] = Bulletmove;
-					isShot_Right[i] = 1;
-					bulletCooltime = 9;
-					break;
-				}
-			}
-		}
-		if (aflag == true) {
-			if (isShot_Right[i] == 1) {
-				Bulletmove += 5;
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Rflag == true)
+	{
+		for (int i = 0; i < BulletNum; i++) {
+			Bulletmove_X = translation.x;
+			Bulletmove_Y = translation.y;
+			if (isShot_Right[i] == 0)
+			{
+				isShot_Right[i] = 1;
+				shot_Right_X[i] = Bulletmove_X;
+				shot_Right_Y[i] = Bulletmove_Y;
+				bulletCooltime = 10;
 				break;
 			}
-		}
-		if (Bulletmove>=1280)
-		{
-			aflag = false;
-		}
- 		if (shot_Right[i] <= 0)
-		{
-			isShot_Right[i] = 0;
 		}
 	}
 
-	for (int i = 0; i < BulletNum; i++) {
-		if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && bulletCooltime == 0 && Lflag == true)
-		{
-
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Lflag == true)
+	{
+		for (int i = 0; i < BulletNum; i++) {
+			Bulletmove_X = translation.x;
+			Bulletmove_Y = translation.y;
 			if (isShot_Left[i] == 0)
 			{
-				shot_Left[i] = Bulletmove;
 				isShot_Left[i] = 1;
-				bulletCooltime = 9;
+				shot_Left_X[i] = Bulletmove_X;
+				shot_Left_Y[i] = Bulletmove_Y;
+				bulletCooltime = 10;
 				break;
 			}
-		}
-		if (isShot_Left[i] == 1) {
-			Bulletmove -= 5;
-		}
-		if (shot_Left[i] <= 0)
-		{
-			isShot_Left[i] = 0;
 		}
 	}
 	if (bulletCooltime > 0)

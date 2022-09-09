@@ -21,6 +21,7 @@ void System::Update()
 	}
 	if (gameCount >= 1)
 	{
+		//プレイヤーが出来次第進める
 		if (HP_X >= 92.5) {
 			//デバフ
 
@@ -30,6 +31,7 @@ void System::Update()
 			//バフ
 
 		}
+
 	}
 
 	DrawFormatString(0, 200, GetColor(255, 255, 255), "%f", gameTimer);
@@ -57,10 +59,10 @@ void System::Draw(int X_,int Y_)
 				}
 			}
 			//デバフ
-			DrawGraph(X_ - 20, Y_ - 20, BUF[AnimetionCount], true);
+			DrawGraph(X_ - 40, Y_ - 40, DEBUF[AnimetionCount], true);
 
 		}
-		else
+		else if(HP_X <= 92.5)
 		{
 			if (AnimetionTimer >= 0)
 			{
@@ -76,7 +78,7 @@ void System::Draw(int X_,int Y_)
 				}
 			}
 			//デバフ
-			DrawGraph(X_ - 20, Y_ - 20, DEBUF[AnimetionCount], true);
+			DrawGraph(X_ - 40, Y_ - 40, BUF[AnimetionCount], true);
 		}
 	}
 }
