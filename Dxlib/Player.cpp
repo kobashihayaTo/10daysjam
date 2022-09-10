@@ -107,7 +107,7 @@ void Player::Draw()
 				shot_Left_X[i] -= 20;
 				DrawCircle((int)(shot_Left_X[i] + radius), shot_Left_Y[i], Bullet_radius, GetColor(255, 0, 0), true);
 			}
-			if (shot_Left_X[i] > 1280)
+			if (shot_Left_X[i] < 0)
 			{
 				isShot_Left[i] = 0;
 			}

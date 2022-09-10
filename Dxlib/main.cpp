@@ -48,6 +48,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	//シーン用変数
 	int Scene = 0;
+	//
+	int timer = 20;
+	int timerFlag = 0;
 	// 最新のキーボード情報用
 	char keys[256] = {0};
 
@@ -67,21 +70,66 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 更新処理
 		switch (Scene)
 		{
-		case 0:
+		case 0://タイトル
+
 			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
+		case 1://操作説明
+
+			timer--;
+			if (timer < 0) {
+				timerFlag = 1;
+			}
 			break;
 
+		case 2://ゲーム
+			player_->Update(keys, oldkeys, system_->GetgameTimer(), system_->Getcount());
+			system_->Update(player_->GetHP_X());
+
+			break;
+
+		case 3://ゲームクリア
+
+			break;
+
+		case 4://ゲームオーバー
+
+			break;
 		}
-		player_->Update(keys, oldkeys, system_->GetgameTimer() , system_->Getcount());
-		system_->Update(player_->GetHP_X());
+	
 		// 描画処理
-		player_->Draw();
-		system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y(),player_->GetHP_X());
+		switch (Scene)
+		{
+		case 0://タイトル
+			DrawBox(0, 0, 1280, 720, GetColor(255, 255, 0), true);
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0&&Scene==0)
+			{
+				Scene = 1;
+			}
+			break;
+
+		case 1://操作説明
+			DrawBox(0, 0, 1280, 720, GetColor(255, 0, 0), true);
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1)
+			{
+				Scene = 2;
+				timerFlag = 0;
+			}
+			break;
+
+		case 2://ゲーム
+			player_->Draw();
+			system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetHP_X());
+
+			break;
+
+		case 3://ゲームクリア
+
+			break;
+
+		case 4://ゲームオーバー
+
+			break;
+		}
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
