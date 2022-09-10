@@ -66,6 +66,8 @@ private:
 	float radius = 16.0f;
 	float move = 5;
 	float GetPlayertrans_ = 100.0f;
+
+	int Bullet_radius = 10;
 	//--------------------
 	
 	//ジャンプ---------------------
@@ -78,10 +80,17 @@ private:
 	bool dflag = false;
 	//----------------------------
 	//バフデバフ
-	int Attack_level;
+	float Attack_level = 1.0f;
+	float Attack_save = 0.0f;
 	int bufflag = false;
 	int debufflag = false;
+
+	int bufTimer = 30;
+	int debufTimer = 30;
 	//弾---------------------------
+	bool Rflag = true;
+	bool Lflag = false;
+	bool Uflag = false;
 
 	float Bulletmove_X = 0;
 	float Bulletmove_Y = 0;
@@ -92,15 +101,16 @@ private:
 	int shot_Right_Y[BulletNum];
 	int shot_Left_X[BulletNum];
 	int shot_Left_Y[BulletNum];
-
+	int shot_Up_X[BulletNum];
+	int shot_Up_Y[BulletNum];
 
 	int isShot_Right[BulletNum];
 	int isShot_Left[BulletNum];
+	int isShot_Up[BulletNum];
 
 	int bulletCooltime = 0;
 	//---------------------------
-	bool Rflag = true;
-	bool Lflag = false;
+
 
 	int memory_left_Y;
 

@@ -81,7 +81,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		system_->Update(player_->GetHP_X());
 		// 描画処理
 		player_->Draw();
-		system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y());
+		system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y(),player_->GetHP_X());
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

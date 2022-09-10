@@ -17,7 +17,6 @@ void System::Update(int HP)
 	{
 		gameTimer = 0.0f;
 		gameCount += 1;
-		HP-=1.5;
 	}
 	if (gameCount >= 1)
 	{
@@ -37,13 +36,13 @@ void System::Update(int HP)
 	DrawFormatString(0, 200, GetColor(255, 255, 255), "%f", gameTimer);
 }
 
-void System::Draw(int X_,int Y_)
+void System::Draw(int X_,int Y_,int HP)
 {
 	DrawGraph(0, 0, HP_, true);
 
 	if (gameCount >= 1)
 	{
-		if (HP_X >= 92.5) {
+		if (HP > 92.5) {
 			if (AnimetionTimer >= 0)
 			{
 				AnimetionTimer--;
@@ -60,7 +59,8 @@ void System::Draw(int X_,int Y_)
 			//デバフ
 			DrawGraph(X_ - 40, Y_ - 40, DEBUF[AnimetionCount], true);
 		}
-		else if(HP_X <= 92.5)
+
+		if(HP < 92.5)
 		{
 			if (AnimetionTimer >= 0)
 			{
@@ -75,7 +75,7 @@ void System::Draw(int X_,int Y_)
 					AnimetionCount = 0;
 				}
 			}
-			//デバフ
+			//バフ
 			DrawGraph(X_ - 40, Y_ - 40, BUF[AnimetionCount], true);
 		}
 	}

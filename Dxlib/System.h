@@ -23,7 +23,7 @@ public:
 
 	void Initialize();
 	void Update(int HP);
-	void Draw(int X_,int Y_);
+	void Draw(int X_,int Y_,int HP);
 
 	int Getcount();
 
