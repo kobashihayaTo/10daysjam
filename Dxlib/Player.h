@@ -39,6 +39,8 @@ public:
 	void Attack(char* keys, char* oldkeys);
 
 public:
+
+
 	int Gettrans_X();
 
 	int Gettrans_Y();
@@ -49,9 +51,8 @@ public:
 
 	int GetFlag_de();
 
-	//void SetBullet() {
-	//	bullet_->Update();
-	//}
+	void Reset();
+
 
 	VECTOR X;
 
@@ -65,7 +66,6 @@ private:
 	//ÉvÉåÉCÉÑÅ[
 	float radius = 16.0f;
 	float move = 5;
-	float GetPlayertrans_ = 100.0f;
 
 	int Bullet_radius = 10;
 	//--------------------
@@ -77,7 +77,6 @@ private:
 	float y_temp = 0;
 	float y_prev = 0;
 	int jampChange = 25;
-
 
 	bool dflag = false;
 	//----------------------------
@@ -113,15 +112,10 @@ private:
 	int bulletCooltime = 0;
 	//---------------------------
 
-
-	int memory_left_Y;
-
 	int HP_X = 200;
 	int HP_Y = 48;
 
 	int HP_;
-	int BUF[3];
-	int DEBUF[3];
 
 };
 

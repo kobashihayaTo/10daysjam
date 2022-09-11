@@ -38,7 +38,7 @@ void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
 	if (gameTimer >= 1)
 	{
 		Count += 1;
-		HP_X -= 0.5;
+		HP_X -= 10.5;
 	}
 	if (Count >= 1)
 	{
@@ -259,5 +259,42 @@ int Player::GetHP_X() { return HP_X; }
 int Player::GetFlag_b(){return bufflag;}
 
 int Player::GetFlag_de(){return debufflag;}
+
+void Player::Reset()
+{
+	translation.x = 100;
+	translation.y = 660;
+	translation.z = 0.0f;
+
+	dodge_timer = 0;
+	dodge_interval = 0;
+	//ジャンプ---------------------
+	jflag = false;
+	y_temp = 0;
+	y_prev = 0;
+	jampChange = 25;
+
+	dflag = false;
+	//----------------------------
+	//バフデバフ
+	Attack_level = 1.0f;
+	Attack_save = 0.0f;
+	bufflag = false;
+	debufflag = false;
+
+	bufTimer = 30;
+	debufTimer = 30;
+	//弾---------------------------
+	Rflag = true;
+	Lflag = false;
+	Uflag = false;
+
+	Bulletmove_X = 0;
+	Bulletmove_Y = 0;
+
+	bulletCooltime = 0;
+
+	HP_X = 200;
+}
 
 

@@ -87,6 +87,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
 				key & PAD_INPUT_1 && timerFlag == 1)
 			{
+				player_->Reset();
+
 				Scene = 2;
 				timerFlag = 0;
 			}
@@ -134,12 +136,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 3://ゲームクリア
-			DrawBox(0, 0, 1280, 720, GetColor(255, 0, 0), true);
-			DrawFormatString(100, 120, GetColor(255, 255, 255), "Scene:%d", Scene);
+			
 			break;
 
 		case 4://ゲームオーバー
-
+			DrawBox(0, 0, 1280, 720, GetColor(255, 0, 0), true);
+			DrawFormatString(100, 120, GetColor(255, 255, 255), "Scene:%d", Scene);
 			break;
 		}
 
