@@ -77,11 +77,6 @@ void Player::Draw()
 	
 	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPÉoÅ[
 	
-	//DrawFormatString(100, 20, GetColor(255, 255, 255), "ç¿ïW:%f", Bulletmove_Y);
-	if (dflag == true)
-	{
-		DrawCircle(100,100,10, GetColor(255, 255, 255), true);
-	}
 
 	if (Rflag == true || Lflag == true || Uflag == true)
 	{
@@ -146,7 +141,7 @@ void Player::Jamp(char* keys, char* oldkeys)
 		}
 		//--------------
 	}
-	if (keys[KEY_INPUT_UP] && jflag == false|| key & PAD_INPUT_1 && jflag == false )
+	if (keys[KEY_INPUT_UP] && jflag == false|| key & PAD_INPUT_2 && jflag == false )
 	{
 		jflag = true;
 		y_prev = translation.y;
@@ -159,7 +154,7 @@ void Player::Dodge(char* keys, char* oldkeys)
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 	if (keys[KEY_INPUT_C] == 1 &&oldkeys[KEY_INPUT_C]==0 && dflag == false ||
-		key & PAD_INPUT_2 && dflag == false && dodge_timer == 0 && dodge_interval <= 0)
+		key & PAD_INPUT_3 && dflag == false && dodge_timer == 0 && dodge_interval <= 0)
 	{
 		dflag = true;
 		dodge_timer = 300;
@@ -176,8 +171,7 @@ void Player::Dodge(char* keys, char* oldkeys)
 		move = 0;
 	}
 
-	if (keys[KEY_INPUT_C] == 1 && oldkeys[KEY_INPUT_C] == 0 && dflag == true ||
-		dflag == true && dodge_timer <= 0)
+	if (dflag == true && dodge_timer <= 0)
 	{
 		translation.z = 0;
 		move = 5;
@@ -189,7 +183,7 @@ void Player::Dodge(char* keys, char* oldkeys)
 		dodge_timer = 0;
 	}
 
-	if (key & PAD_INPUT_2)
+	if (key & PAD_INPUT_3)
 	{
 		DrawFormatString(100, 190, GetColor(255, 255, 255), "îΩâû");
 	}
@@ -200,7 +194,9 @@ void Player::Dodge(char* keys, char* oldkeys)
 
 void Player::Attack(char* keys, char* oldkeys)
 {
-	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Rflag == true)
+	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Rflag == true|| 
+		key & PAD_INPUT_1 && bulletCooltime == 0 && Rflag == true)
 	{
 		for (int i = 0; i < BulletNum; i++) {
 			Bulletmove_X = translation.x;
@@ -216,7 +212,8 @@ void Player::Attack(char* keys, char* oldkeys)
 		}
 	}
 
-	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Lflag == true)
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Lflag == true||
+		key & PAD_INPUT_1 && bulletCooltime == 0 && Lflag == true)
 	{
 		for (int i = 0; i < BulletNum; i++) {
 			Bulletmove_X = translation.x;
@@ -231,7 +228,8 @@ void Player::Attack(char* keys, char* oldkeys)
 			}
 		}
 	}
-	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Uflag == true)
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Uflag == true||
+		key & PAD_INPUT_1 && bulletCooltime == 0 && Uflag == true)
 	{
 		for (int i = 0; i < BulletNum; i++) {
 			Bulletmove_X = translation.x;
