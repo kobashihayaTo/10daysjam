@@ -69,7 +69,9 @@ private:
 
 	int Bullet_radius = 10;
 	//--------------------
-	
+	//‰ñ”ð
+	int dodge_timer = 0;
+	int dodge_interval = 0;
 	//ƒWƒƒƒ“ƒv---------------------
 	bool jflag = false;
 	float y_temp = 0;

@@ -4,6 +4,7 @@ void Player::Initialize()
 {
 	translation.x = 100;
 	translation.y = 660;
+	translation.z = 0.0f;
 }
 
 void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
@@ -12,7 +13,7 @@ void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
 	X = VGet(translation.x, translation.y, translation.z);
 
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (key&PAD_INPUT_RIGHT|| keys[KEY_INPUT_RIGHT] == 1)
+	if (keys[KEY_INPUT_RIGHT] == 1||key&PAD_INPUT_RIGHT)
 	{
 		Uflag = false;
 		Lflag = false;
@@ -37,7 +38,7 @@ void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
 	if (gameTimer >= 1)
 	{
 		Count += 1;
-		HP_X -= 10.5;
+		HP_X -= 0.5;
 	}
 	if (Count >= 1)
 	{
@@ -134,6 +135,7 @@ void Player::Draw()
 void Player::Jamp(char* keys, char* oldkeys)
 {
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+
 	if (jflag == true) {
 		y_temp = translation.y;
 		translation.y += (translation.y - y_prev) + 1;
@@ -152,27 +154,48 @@ void Player::Jamp(char* keys, char* oldkeys)
 	}
 }
 
-//Œã‰ñ‚µ
-
 void Player::Dodge(char* keys, char* oldkeys)
 {
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	if (keys[KEY_INPUT_C] == 1 && dflag == false || key & PAD_INPUT_4 && dflag == false)
+	if (keys[KEY_INPUT_C] == 1 &&oldkeys[KEY_INPUT_C]==0 && dflag == false ||
+		key & PAD_INPUT_2 && dflag == false && dodge_timer == 0 && dodge_interval <= 0)
 	{
 		dflag = true;
+		dodge_timer = 300;
+		dodge_interval = 300;
 	}
-	if (key & PAD_INPUT_4 && dflag == true)
+
+	if (dflag == true)
 	{
-		dflag = false;
-		translation.z = 0;
-		move = 5;
+		dodge_timer--;
 	}
 	if (dflag == true && translation.z < 32)
 	{
 		translation.z += radius;
 		move = 0;
 	}
+
+	if (keys[KEY_INPUT_C] == 1 && oldkeys[KEY_INPUT_C] == 0 && dflag == true ||
+		dflag == true && dodge_timer <= 0)
+	{
+		translation.z = 0;
+		move = 5;
+		dodge_interval--;
+	}
+	if (dodge_interval <= 0)
+	{
+		dflag = false;
+		dodge_timer = 0;
+	}
+
+	if (key & PAD_INPUT_2)
+	{
+		DrawFormatString(100, 190, GetColor(255, 255, 255), "”½‰ž");
+	}
+	DrawFormatString(100, 210, GetColor(255, 255, 255), "translation:%f", translation.z);
+	DrawFormatString(100, 230, GetColor(255, 255, 255), "dodge_timer:%d", dodge_timer);
+	DrawFormatString(100, 250, GetColor(255, 255, 255), "dodge_interval:%d", dodge_interval);
 }
 
 void Player::Attack(char* keys, char* oldkeys)

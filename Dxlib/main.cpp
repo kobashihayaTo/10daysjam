@@ -48,9 +48,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	//シーン用変数
 	int Scene = 0;
-	//
+	
 	int timer = 20;
 	int timerFlag = 0;
+	//プレイヤーのHP
+	int HP;
+
+	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	// 最新のキーボード情報用
 	char keys[256] = {0};
 
@@ -84,8 +88,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 2://ゲーム
 			player_->Update(keys, oldkeys, system_->GetgameTimer(), system_->Getcount());
 			system_->Update(player_->GetHP_X());
-
+			HP = player_->GetHP_X();
+			if (HP <= 10)
+			{
+				Scene = 4;
+			}
 			break;
+
 
 		case 3://ゲームクリア
 
@@ -123,7 +132,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 3://ゲームクリア
-
+			DrawBox(0, 0, 1280, 720, GetColor(255, 0, 0), true);
+			DrawFormatString(100, 120, GetColor(255, 255, 255), "Scene:%d", Scene);
 			break;
 
 		case 4://ゲームオーバー
