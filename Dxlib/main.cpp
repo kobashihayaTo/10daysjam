@@ -54,7 +54,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	//プレイヤーのHP
 	int HP;
 
-	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	
+
 	// 最新のキーボード情報用
 	char keys[256] = {0};
 
@@ -72,13 +73,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
+		int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 		switch (Scene)
 		{
 		case 0://タイトル
-
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && Scene == 0 ||
+				key & PAD_INPUT_1 && Scene == 0)
+			{
+				Scene = 1;
+			}
 			break;
 		case 1://操作説明
-
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
+				key & PAD_INPUT_1 && timerFlag == 1)
+			{
+				Scene = 2;
+				timerFlag = 0;
+			}
 			timer--;
 			if (timer < 0) {
 				timerFlag = 1;
@@ -110,19 +121,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 		case 0://タイトル
 			DrawBox(0, 0, 1280, 720, GetColor(255, 255, 0), true);
-			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0&&Scene==0)
-			{
-				Scene = 1;
-			}
 			break;
 
 		case 1://操作説明
 			DrawBox(0, 0, 1280, 720, GetColor(255, 0, 0), true);
-			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1)
-			{
-				Scene = 2;
-				timerFlag = 0;
-			}
 			break;
 
 		case 2://ゲーム
