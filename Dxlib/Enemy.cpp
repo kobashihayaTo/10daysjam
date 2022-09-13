@@ -8,6 +8,8 @@ void Enemy::Initialize()
 	translation.x = 0;
 	translation.y = 0;
 	translation.z = 0;
+	//向きフラグ
+	seeFlag = 0; //0が左, 1が右
 	//生存フラグ
 	aliveFlag = 0;
 	//ジャンプフラグ
@@ -42,6 +44,14 @@ void Enemy::Update(float x, float y, int Height, int Width)
 	}
 	else if (aliveFlag == 1)
 	{
+		if (translation.x > x)
+		{
+			seeFlag = 1;
+		}
+		else if (translation.x < x)
+		{
+			seeFlag = 0;
+		}
 		switch (moveFlag)
 		{
 		case 0:
@@ -106,13 +116,18 @@ void Enemy::Update(float x, float y, int Height, int Width)
 	}
 }
 
-void Enemy::Draw()
+void Enemy::Draw(int graphHandle)
 {
-	int color = GetColor(255, 255, 0);
-
 	if (aliveFlag == 1)
 	{
-		DrawCircle(translation.x, translation.y, radius, color, TRUE);
+		if (seeFlag == 0)
+		{
+			DrawGraph(translation.x - radius + radius, translation.y - radius, graphHandle, TRUE);
+		}
+		else if (seeFlag == 1)
+		{
+			DrawTurnGraph(translation.x - radius + radius, translation.y - radius, graphHandle, TRUE);
+		}
 	}
 }
 

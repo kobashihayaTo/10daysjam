@@ -16,7 +16,7 @@ void Player::Initialize()
 	Bullet_ = LoadGraph("Bullet.png", true);
 
 	Bullet_SE = LoadSoundMem("Œe‚ğŒ‚‚Â.mp3");
-	ChangeVolumeSoundMem(255 * 35 / 100, Bullet_SE);
+	ChangeVolumeSoundMem(255 * 25 / 100, Bullet_SE);
 }
 
 void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int scrollX)

@@ -45,9 +45,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 	// ゲームループで使う変数の宣言
-	int floor = LoadGraph("Resource/floor.png");
-	int second = LoadGraph("Resource/second.png");
-	int pillar = LoadGraph("Resource/pillar.png");
+	int floor = LoadGraph("floor.png");
+	int second = LoadGraph("second.png");
+	int pillar = LoadGraph("pillar.png");
+
+	int enemy[6]; LoadDivGraph("enemy.png", 6, 6, 1, 64, 64, enemy, FALSE);
+	int enemy2[3]; LoadDivGraph("enemy2.png", 3, 3, 1, 64, 64, enemy2, FALSE);
+
+	int enemyBullet[4]; LoadDivGraph("enemy2_bullet.png", 4, 4, 1, 32, 32, enemyBullet, FALSE);
 
 	int map = LoadGraph("map.png");
 	int title = LoadGraph("TITLE.png");
@@ -56,7 +61,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int gameover = LoadGraph("gameover.png");
 	int Camel[3];
 	LoadDivGraph("dron.png", 3, 3, 1, 64, 64, Camel);
-
+	int Title_BGM;
+	Title_BGM = LoadSoundMem("決戦へ_2.mp3");
+	ChangeVolumeSoundMem(255 * 30 / 100, Title_BGM);
+	int Game_BGM = LoadSoundMem("MusMus-BGM-122.mp3");
+	ChangeVolumeSoundMem(255 * 20 / 100, Game_BGM);
+	int Over_BGM = LoadSoundMem("ゲームオーバー.mp3");
+	ChangeVolumeSoundMem(255 * 30 / 100, Over_BGM);
+	int Clear_BGM = LoadSoundMem("レトロなゲームクリア音.mp3");
+	ChangeVolumeSoundMem(255 * 30 / 100, Clear_BGM);
 	// ゲームループで使う変数の宣言
 	System* system_ = new System();
 	system_->Initialize();
@@ -80,8 +93,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int timerFlag = 0;
 
 	int HP;
-
 	int MAP;
+
+	int enemyAnimation[3] = { 100,100 ,100 };
+	int enemyCount[3] = { 0 ,0,0 };
 
 	int AnimetionTimer = 8;
 	int AnimetionCount = 1;
@@ -98,7 +113,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		for (int i = 0; i < 256; i++)
 		{
 			oldkeys[i] = keys[i];
- 		}
+		}
 		// 最新のキーボード情報を取得
 		GetHitKeyStateAll(keys);
 
@@ -112,6 +127,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (Scene)
 		{
 		case 0://タイトル
+
+
+
 			timer--;
 			if (timer < 0) {
 				timerFlag = 1;
@@ -121,12 +139,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				key & PAD_INPUT_1 && timerFlag == 1)
 			{
 				player_->Reset();
-				system_->Reset();
-
 
 				Scene = 1;
 				timerFlag = 0;
 				timer = 60;
+
+				if (CheckSoundMem(Title_BGM) == 1) {
+					StopSoundMem(Title_BGM);
+				}
 			}
 			break;
 		case 1://操作説明
@@ -142,12 +162,59 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				Scene = 2;
 				timerFlag = 0;
 				timer = 60;
+				
 			}
 
 			break;
 
 		case 2://ゲーム
+			
 			DrawGraph(0, 0, map, true);
+#pragma region アニメーション管理
+			//--------------敵1-----------------//
+			if (enemyAnimation[0] > 0)
+			{
+				enemyAnimation[0] -= 10;
+			}
+			if (enemyAnimation[0] <= 0 && enemyCount[0] < 6)
+			{
+				enemyCount[0] += 1;
+				enemyAnimation[0] = 100;
+				if (enemyCount[0] > 5)
+				{
+					enemyCount[0] = 0;
+				}
+			}
+			//---------------敵2----------------//
+			if (enemyAnimation[1] > 0)
+			{
+				enemyAnimation[1] -= 10;
+			}
+			if (enemyAnimation[1] <= 0 && enemyCount[1] < 3)
+			{
+				enemyCount[1] += 1;
+				enemyAnimation[1] = 100;
+				if (enemyCount[1] > 2)
+				{
+					enemyCount[1] = 0;
+				}
+			}
+			//---------------敵弾-----------------//
+			if (enemyAnimation[2] > 0)
+			{
+				enemyAnimation[2] -= 10;
+			}
+			if (enemyAnimation[2] <= 0 && enemyCount[2] < 3)
+			{
+				enemyCount[2] += 1;
+				enemyAnimation[2] = 100;
+				if (enemyCount[2] > 2)
+				{
+					enemyCount[2] = 0;
+				}
+			}
+#pragma endregion
+
 
 			system_->Update(player_->GetHP_X());
 
@@ -160,25 +227,28 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			enemy_->Update(player_->Gettrans_X(), player_->Gettrans_Y(), WIN_HEIGHT, WIN_WIDTH);
 
 			enemy2_->Update(WIN_HEIGHT, WIN_WIDTH, player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetRadius(), player_->GetFlag(), player_->GetHP_X());
-
 			map_->Update();
-
 			// 描画処理
 			map_->Draw(floor, second, pillar);
 			player_->Draw();
-			enemy_->Draw();
-			enemy2_->Draw();
+			enemy_->Draw(enemy[enemyCount[0]]);
+			enemy2_->Draw(enemy2[enemyCount[1]], enemyBullet[enemyCount[2]]);
 
 			HP = player_->GetHP_X();
 			if (HP <= 10)
 			{
 				Scene = 4;
+				if (CheckSoundMem(Game_BGM) == 1) {
+					StopSoundMem(Game_BGM);
+				}
 			}
-
 			MAP = map_->GetScrollX();
 			if (MAP == 7680)
 			{
 				Scene = 3;
+				if (CheckSoundMem(Game_BGM) == 1) {
+					StopSoundMem(Game_BGM);
+				}
 			}
 			break;
 
@@ -190,12 +260,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
-				key & PAD_INPUT_1 && timerFlag == 1)
+				key & PAD_INPUT_1 && timerFlag == 1) 
 			{
 				Scene = 0;
 				timerFlag = 0;
-				timer = 60;
+				timer = 120;
+				if (CheckSoundMem(Clear_BGM) == 1) {
+					StopSoundMem(Clear_BGM);
+				}
 			}
+			
 			break;
 
 		case 4://ゲームオーバー
@@ -207,11 +281,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
 				key & PAD_INPUT_1 && timerFlag == 1)
 			{
-
 				Scene = 0;
 				timerFlag = 0;
 				timer = 120;
+				if (CheckSoundMem(Over_BGM) == 1) {
+					StopSoundMem(Over_BGM);
+				}
 			}
+
 			break;
 		}
 
@@ -219,14 +296,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (Scene)
 		{
 		case 0://タイトル
+
+			if(CheckSoundMem(Title_BGM) == 0) {
+				PlaySoundMem(Title_BGM, DX_PLAYTYPE_BACK,true);
+			}
+
 			DrawGraph(0, 0, title, true);
 			break;
 
 		case 1://操作説明
+			
+
 			DrawGraph(0, 0, manual, true);
 			break;
 
 		case 2://ゲーム
+			if (CheckSoundMem(Game_BGM) == 0) {
+				PlaySoundMem(Game_BGM, DX_PLAYTYPE_BACK, true);
+			}
 			if (AnimetionTimer >= 0)
 			{
 				AnimetionTimer--;
@@ -240,6 +327,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					AnimetionCount = 0;
 				}
 			}
+
 			DrawGraph(WIN_WIDTH / 2, 680, Camel[AnimetionCount], true);
 			player_->Draw();
 			system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetHP_X());
@@ -249,15 +337,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 3://ゲームクリア
-			DrawGraph(0, 0, gameclear,true);
+			DrawGraph(0, 0, gameclear, true);
+			if (CheckSoundMem(Clear_BGM) == 0) {
+				PlaySoundMem(Clear_BGM, DX_PLAYTYPE_BACK, true);
+			}
 			break;
 
 		case 4://ゲームオーバー
+			if (CheckSoundMem(Over_BGM) == 0) {
+				PlaySoundMem(Over_BGM, DX_PLAYTYPE_BACK, true);
+			}
 			DrawGraph(0, 0, gameover, true);
 			break;
 		}
 
-		// 描画処理
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

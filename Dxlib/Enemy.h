@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw(int graphHandle);
 
 	/// <summary>
 	/// リスポン
@@ -48,6 +48,8 @@ private:
 	//敵のパラメータ
 	VECTOR translation;
 	float radius;
+	//向きフラグ
+	int seeFlag;
 	//生存フラグ
 	int aliveFlag;
 	//移動フラグ

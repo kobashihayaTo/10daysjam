@@ -10,6 +10,8 @@ void Enemy2::Initialize(int Height, int Width)
 	radius = 8;
 	//生存フラグ
 	aliveFlag = 0;
+	//向きフラグ
+	seeFlag = 0; //0が右,1が左
 	//行動カウンタ
 	moveTimer = 100;
 	//リスポンタイマー
@@ -58,19 +60,24 @@ void Enemy2::Update(int Height, int Width, float playerX, float playerY, int pla
 
 }
 
-void Enemy2::Draw()
+void Enemy2::Draw(int graphHandle, int bulletHandle)
 {
-	int color = GetColor(255, 0, 0);
-	int color2 = GetColor(255, 255, 0);
 	if (aliveFlag == 0)
 	{
-		DrawCircle(translation.x, translation.y, radius, color, TRUE);
+		DrawGraph(translation.x - radius, translation.y - radius, graphHandle, FALSE);
 	}
 	else if (aliveFlag == 1)
 	{
-		DrawCircle(translation.x, translation.y, radius, color2, TRUE);
+		if (seeFlag == 0)
+		{
+			DrawTurnGraph(translation.x - radius, translation.y - radius, graphHandle, FALSE);
+		}
+		else if (seeFlag == 1)
+		{
+			DrawGraph(translation.x - radius, translation.y - radius, graphHandle, FALSE);
+		}
 	}
-	bullet->Draw();
+	bullet->Draw(bulletHandle);
 	/*DrawFormatString(0, 60, color, "敵2体目の情報");
 	DrawFormatString(0, 75, color, "リスタイマー[%f]減速タイマー[%f]攻撃タイマー[%f]", responTimer, defSpeedTimer, attackTimer);
 	DrawFormatString(0, 90, color, "フラグ[%d]", aliveFlag);

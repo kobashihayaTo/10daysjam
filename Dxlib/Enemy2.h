@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw(int graphHandle, int bulletHandle);
 
 	/// <summary>
 	/// リスポン
@@ -46,6 +46,8 @@ public:
 
 	//生存フラグ
 	int aliveFlag;
+	//向きフラグ
+	int seeFlag;
 
 	//行動タイマー
 	int moveTimer;;
