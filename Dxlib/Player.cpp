@@ -3,7 +3,7 @@
 void Player::Initialize()
 {
 	translation.x = 100;
-	translation.y = 660;
+	translation.y = 680;
 	translation.z = 0.0f;
 }
 
@@ -65,7 +65,7 @@ void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int s
 	DrawFormatString(100, 60, GetColor(255, 255, 255), "taima-:%f", gameTimer);
 	DrawFormatString(100, 90, GetColor(255, 255, 255), "Attack_level:%f", Attack_level);
 	DrawFormatString(100, 120, GetColor(255, 255, 255), "Attack_level:%f", Attack_level);
-	Dodge(keys, oldkeys);
+	//Dodge(keys, oldkeys);
 	Jamp(keys, oldkeys);
 	Attack(keys, oldkeys);
 
@@ -154,48 +154,48 @@ void Player::Jamp(char* keys, char* oldkeys)
 	}
 }
 
-void Player::Dodge(char* keys, char* oldkeys)
-{
-	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-
-	if (keys[KEY_INPUT_C] == 1 && oldkeys[KEY_INPUT_C] == 0 && dflag == false ||
-		key & PAD_INPUT_3 && dflag == false && dodge_timer == 0 && dodge_interval <= 0)
-	{
-		dflag = true;
-		dodge_timer = 60;
-		dodge_interval = 300;
-	}
-
-	if (dflag == true)
-	{
-		dodge_timer--;
-	}
-	if (dflag == true && translation.z < 32)
-	{
-		translation.z += Bullet_radius;
-		move = 0;
-	}
-
-	if (dflag == true && dodge_timer <= 0)
-	{
-		translation.z = 0;
-		move = 5;
-		dodge_interval--;
-	}
-	if (dodge_interval <= 0)
-	{
-		dflag = false;
-		dodge_timer = 0;
-	}
-
-	if (key & PAD_INPUT_3)
-	{
-		DrawFormatString(100, 190, GetColor(255, 255, 255), "”½‰ž");
-	}
-	DrawFormatString(100, 210, GetColor(255, 255, 255), "translation:%f", translation.z);
-	DrawFormatString(100, 230, GetColor(255, 255, 255), "dodge_timer:%d", dodge_timer);
-	DrawFormatString(100, 250, GetColor(255, 255, 255), "dodge_interval:%d", dodge_interval);
-}
+//void Player::Dodge(char* keys, char* oldkeys)
+//{
+//	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+//
+//	if (keys[KEY_INPUT_C] == 1 && oldkeys[KEY_INPUT_C] == 0 && dflag == false ||
+//		key & PAD_INPUT_3 && dflag == false && dodge_timer == 0 && dodge_interval <= 0)
+//	{
+//		dflag = true;
+//		dodge_timer = 60;
+//		dodge_interval = 300;
+//	}
+//
+//	if (dflag == true)
+//	{
+//		dodge_timer--;
+//	}
+//	if (dflag == true && translation.z < 32)
+//	{
+//		translation.z += Bullet_radius;
+//		move = 0;
+//	}
+//
+//	if (dflag == true && dodge_timer <= 0)
+//	{
+//		translation.z = 0;
+//		move = 5;
+//		dodge_interval--;
+//	}
+//	if (dodge_interval <= 0)
+//	{
+//		dflag = false;
+//		dodge_timer = 0;
+//	}
+//
+//	if (key & PAD_INPUT_3)
+//	{
+//		DrawFormatString(100, 190, GetColor(255, 255, 255), "”½‰ž");
+//	}
+//	DrawFormatString(100, 210, GetColor(255, 255, 255), "translation:%f", translation.z);
+//	DrawFormatString(100, 230, GetColor(255, 255, 255), "dodge_timer:%d", dodge_timer);
+//	DrawFormatString(100, 250, GetColor(255, 255, 255), "dodge_interval:%d", dodge_interval);
+//}
 
 void Player::Attack(char* keys, char* oldkeys)
 {
