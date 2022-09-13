@@ -64,17 +64,17 @@ void Enemy2::Draw(int graphHandle, int bulletHandle)
 {
 	if (aliveFlag == 0)
 	{
-		DrawGraph(translation.x - radius, translation.y - radius, graphHandle, FALSE);
+		DrawGraph(translation.x - radius, translation.y - radius, graphHandle, true);
 	}
 	else if (aliveFlag == 1)
 	{
 		if (seeFlag == 0)
 		{
-			DrawTurnGraph(translation.x - radius, translation.y - radius, graphHandle, FALSE);
+			DrawTurnGraph(translation.x - radius, translation.y - radius, graphHandle, true);
 		}
 		else if (seeFlag == 1)
 		{
-			DrawGraph(translation.x - radius, translation.y - radius, graphHandle, FALSE);
+			DrawGraph(translation.x - radius, translation.y - radius, graphHandle, true);
 		}
 	}
 	bullet->Draw(bulletHandle);

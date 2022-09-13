@@ -128,8 +128,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 		case 0://タイトル
 
-
-
 			timer--;
 			if (timer < 0) {
 				timerFlag = 1;
@@ -158,16 +156,30 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
 				key & PAD_INPUT_1 && timerFlag == 1)
 			{
-
-				Scene = 2;
 				timerFlag = 0;
-				timer = 60;
-				
+				timer = 65;
+				Scene = 2;
 			}
 
 			break;
+		case 2://操作説明その２
+			timer--;
+			if (timer < 0) {
+				timerFlag = 1;
+			}
 
-		case 2://ゲーム
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
+				key & PAD_INPUT_1 && timerFlag == 1)
+			{
+
+				Scene = 3;
+				timerFlag = 0;
+				timer = 60;
+
+			}
+			break;
+
+		case 3://ゲーム
 			
 			DrawGraph(0, 0, map, true);
 #pragma region アニメーション管理
@@ -237,7 +249,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			HP = player_->GetHP_X();
 			if (HP <= 10)
 			{
-				Scene = 4;
+				Scene = 5;
 				if (CheckSoundMem(Game_BGM) == 1) {
 					StopSoundMem(Game_BGM);
 				}
@@ -245,7 +257,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			MAP = map_->GetScrollX();
 			if (MAP == 7680)
 			{
-				Scene = 3;
+				Scene = 4;
 				if (CheckSoundMem(Game_BGM) == 1) {
 					StopSoundMem(Game_BGM);
 				}
@@ -253,26 +265,26 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 
-		case 3://ゲームクリア
+		case 4://ゲームクリア
 			timer--;
 			if (timer < 0) {
 				timerFlag = 1;
 			}
-
+			if (CheckSoundMem(Clear_BGM) == 1) {
+				StopSoundMem(Clear_BGM);
+			}
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
 				key & PAD_INPUT_1 && timerFlag == 1) 
 			{
 				Scene = 0;
 				timerFlag = 0;
 				timer = 120;
-				if (CheckSoundMem(Clear_BGM) == 1) {
-					StopSoundMem(Clear_BGM);
-				}
+				
 			}
 			
 			break;
 
-		case 4://ゲームオーバー
+		case 5://ゲームオーバー
 			timer--;
 			if (timer < 0) {
 				timerFlag = 1;
@@ -284,11 +296,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				Scene = 0;
 				timerFlag = 0;
 				timer = 120;
-				if (CheckSoundMem(Over_BGM) == 1) {
-					StopSoundMem(Over_BGM);
-				}
+				
 			}
-
+			if (CheckSoundMem(Over_BGM) == 1) {
+				StopSoundMem(Over_BGM);
+			}
 			break;
 		}
 
@@ -310,7 +322,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			DrawGraph(0, 0, manual, true);
 			break;
 
-		case 2://ゲーム
+		case 2://操作説明その２
+
+			break;
+		case 3://ゲーム
 			if (CheckSoundMem(Game_BGM) == 0) {
 				PlaySoundMem(Game_BGM, DX_PLAYTYPE_BACK, true);
 			}
@@ -336,14 +351,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			break;
 
-		case 3://ゲームクリア
+		case 4://ゲームクリア
 			DrawGraph(0, 0, gameclear, true);
 			if (CheckSoundMem(Clear_BGM) == 0) {
 				PlaySoundMem(Clear_BGM, DX_PLAYTYPE_BACK, true);
 			}
 			break;
 
-		case 4://ゲームオーバー
+		case 5://ゲームオーバー
 			if (CheckSoundMem(Over_BGM) == 0) {
 				PlaySoundMem(Over_BGM, DX_PLAYTYPE_BACK, true);
 			}
