@@ -58,7 +58,7 @@ private:
 	float yAdd;
 
 	//‘Ì—Í
-	int HP;
+	int HP = 200;
 
 	System* system_ = new System();
 	Player* player_ = new Player();

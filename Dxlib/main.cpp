@@ -68,7 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	//シーン用変数
 	int Scene = 0;
 
-	int timer = 120;
+	int timer = 60;
 	int timerFlag = 0;
 
 	int HP;
@@ -86,7 +86,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		for (int i = 0; i < 256; i++)
 		{
 			oldkeys[i] = keys[i];
-		}
+ 		}
 		// 最新のキーボード情報を取得
 		GetHitKeyStateAll(keys);
 
@@ -112,7 +112,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				Scene = 1;
 				timerFlag = 0;
-				timer = 120;
+				timer = 60;
 			}
 			break;
 		case 1://操作説明
@@ -127,7 +127,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				Scene = 2;
 				timerFlag = 0;
-				timer = 120;
+				timer = 60;
 			}
 
 			break;
@@ -138,7 +138,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player_->Collision(enemy_->GetFlag(), enemy_->GetTranslation().x, enemy_->GetTranslation().y, enemy_->GetRadius());
 			player_->Oncollision(enemy_->GetTranslation().x, enemy_->GetTranslation().y, enemy_->GetRadius(), enemy_->GetFlag(), enemy2_->translation.x, enemy2_->translation.y, enemy2_->radius, enemy2_->aliveFlag, enemy_->GetHP(), enemy2_->HP);
 			enemy_->Update(player_->Gettrans_X(), player_->Gettrans_Y(), WIN_HEIGHT, WIN_WIDTH);
-			enemy2_->Update(WIN_HEIGHT, WIN_WIDTH, player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetRadius(), player_->GetFlag(), player_->GetHP());
+			enemy2_->Update(WIN_HEIGHT, WIN_WIDTH, player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetRadius(), player_->GetFlag(), player_->GetHP_X());
 			map_->Update();
 			// 描画処理
 			map_->Draw(floor, second, pillar);

@@ -38,7 +38,7 @@ void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int s
 	if (gameTimer >= 1)
 	{
 		Count += 1;
-		HP_X -= 10.5;
+		HP_X -= 5;
 	}
 	if (Count >= 1)
 	{
@@ -46,19 +46,19 @@ void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int s
 		if (HP_X > 92.5) {
 			bufflag = false;
 			debufflag = true;
-			Attack_level = 1.0f;
+			Attack_level = 2.0f;
 			if (debufflag == true) {
-				Attack_level = 0.5f;
+				Attack_level = 2.0f;
 			}
 		}
 		if (HP_X < 92.5)
 		{
 			debufflag = false;
 			bufflag = true;
-			Attack_level = 1.0f;
+			Attack_level = 2.0f;
 			if (bufflag == true) {
 				//ƒoƒt
-				Attack_level = 2.0f;
+				Attack_level = 3.0f;
 			}
 		}
 	}
@@ -76,8 +76,11 @@ void Player::Draw()
 	DrawBox((int)(translation.x + Playerradius), (int)(translation.y + Playerradius), (int)(translation.x - Playerradius), (int)(translation.y - Playerradius), GetColor(255, 255, 255), true);
 
 	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPƒo[
-
-
+	if (HP_X > 200)
+	{
+		HP_X = 200;
+	}
+	DrawFormatString(100, 310, GetColor(255, 255, 255), "HP_X:%d", HP_X);
 	if (Rflag == true || Lflag == true || Uflag == true)
 	{
 		for (int i = 0; i < BulletNum; i++)
@@ -260,7 +263,7 @@ void Player::Collision(int enemyFlag, float enemyX, float enemyY, float enemyrad
 		float c = (Playerradius + enemyradius) * (Playerradius + enemyradius);
 		if (c >= a + b)
 		{
-			HP_ -= 1;
+			HP_X -= 20;
 			aliveFlag = 2;
 
 		}
@@ -292,12 +295,14 @@ void Player::Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyF
 				float c = (enemyRadius + Bullet_radius/*©’e”¼Œa*/) * (enemyRadius + Bullet_radius/*©’e”¼Œa*/);
 				if (c >= a + b)
 				{
-					HP -= 1;
-					HP_ += 100;
 					enemyFlag = 2;
+					HP -= Attack_level;
+					HP_X += 5;
 					isShot_Right[f] = 0;
+					break;
 				}
 			}
+
 		}
 	}
 
@@ -311,12 +316,15 @@ void Player::Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyF
 			float c = (enemy2Radius + Bullet_radius/*©’e”¼Œa*/) * (enemy2Radius + Bullet_radius/*©’e”¼Œa*/);
 			if (c >= a + b)
 			{
-				HP2 -= 1;
-				HP_ += 100;
+
 				enemy2Flag = 2;
+				HP2 -= Attack_level;
+				HP_X += 5;
 				isShot_Up[i] = 0;
+				
 			}
 		}
+
 	}
 
 	//“G1‚ÆƒvƒŒƒCƒ„[’e
@@ -331,16 +339,17 @@ void Player::Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyF
 				float c = (enemyRadius + Bullet_radius/*©’e”¼Œa*/) * (enemyRadius + Bullet_radius/*©’e”¼Œa*/);
 				if (c >= a + b)
 				{
-					HP -= 1;
-					HP_ += 1;
 					enemyFlag = 2;
+					HP -= Attack_level;
+					HP_X += 5;
 					isShot_Left[f] = 0;
+					
 				}
 			}
 		}
 	}
-
-
+	DrawFormatString(100, 270, GetColor(255, 255, 255), "HP:%d", HP);
+	DrawFormatString(100, 290, GetColor(255, 255, 255), " enemyFlag:%d", enemyFlag);
 }
 
 int Player::Gettrans_X() { return translation.x; }

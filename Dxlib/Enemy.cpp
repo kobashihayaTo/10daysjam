@@ -109,7 +109,7 @@ void Enemy::Respon(float X, float Y, int Height, int Width)
 	{
 		responTimer = 50.0f;
 		translation.x = Width;
-		translation.y = 690;
+		translation.y = 670;
 		aliveFlag = 1;	//¶‘¶ƒtƒ‰ƒO•Ï‰»
 	}
 }
