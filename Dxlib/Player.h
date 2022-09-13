@@ -4,6 +4,8 @@
 #include "Map.h"
 #include "vector"
 
+
+
 class Player
 {
 public:
@@ -153,4 +155,7 @@ private:
 	int AnimetionTimer = 8;
 	int AnimetionCount = 1;
 	int player_jump;
+
+	int Bullet_;
+	
 };

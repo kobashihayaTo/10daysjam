@@ -10,10 +10,18 @@ void Enemy::Initialize()
 	translation.z = 0;
 	//生存フラグ
 	aliveFlag = 0;
+	//ジャンプフラグ
+	jumpFlag = 0;
+	//隠れるフラグ
+	hideFlag = 0;
 	//移動フラグ
 	moveFlag = 0;
+	//隠れるタイマー
+	hideTimer = 25.0f;
 	//リスポンタイマー
 	responTimer = 50.0f;
+	//ジャンプタイマー
+	jumpTimer = 75.0f;
 	//移動タイマー
 	moveTimer = 100.0f;
 
@@ -62,7 +70,7 @@ void Enemy::Update(float x, float y, int Height, int Width)
 			}
 			if (moveTimer <= 0.0f)
 			{
-				moveTimer = 20.0f;
+				moveTimer = 50.0f;
 				moveFlag = 3;
 			}
 			break;
@@ -74,14 +82,28 @@ void Enemy::Update(float x, float y, int Height, int Width)
 			}
 			if (moveTimer <= 0.0f)
 			{
-				moveTimer = 200.0f;
-				moveFlag = 2;
+				moveTimer = 108.0f;
+				moveFlag = 4;
 			}
 			break;
+		case 4:
+			//ジャンプ
+			Attack2(x, y);
+			if (moveTimer != 0)
+			{
+				moveTimer -= 0.5f;
+			}
+			if (moveTimer <= 0.0f)
+			{
+				moveTimer = 108.0f;
+				moveFlag = 5;
+			}
+			break;
+		case 5:
+			Hide(x, y);
+			break;
 		}
-
 	}
-	DrawFormatString(0, 15, GetColor(255, 255, 255), "フラグ:%d", moveFlag);
 }
 
 void Enemy::Draw()
@@ -92,11 +114,6 @@ void Enemy::Draw()
 	{
 		DrawCircle(translation.x, translation.y, radius, color, TRUE);
 	}
-
-	DrawFormatString(600, 0, color, "座標[%d]", aliveFlag);
-
-
-	DrawFormatString(0, 30, color, "タイマー[%f]", responTimer);
 }
 
 void Enemy::Respon(float X, float Y, int Height, int Width)
@@ -128,6 +145,63 @@ void Enemy::Attack(float x, float y)
 	else if (x > translation.x + radius)
 	{
 		translation.x += 2.0f;
+	}
+	if (translation.y != 680)
+	{
+		translation.y = 680;
+	}
+}
+
+void Enemy::Attack2(float x, float y)
+{
+	//ジャンプ
+	if (jumpTimer > 0.0f && jumpFlag == 0)
+	{
+		jumpTimer -= 3.0f;
+	}
+
+	if (jumpTimer <= 0.0f && jumpFlag == 0)
+	{
+		jumpFlag = 1;
+		yAdd = -8.0f;
+		translation.y += yAdd;
+	}
+	if (jumpFlag == 1 && translation.y < 680)
+	{
+		translation.y += yAdd;
+		yAdd += 0.2f;
+		if (translation.y >= 680)
+		{
+			yAdd = 0.0f;
+			translation.y = 680;
+			jumpFlag = 0;
+			jumpTimer = 75.0f;
+		}
+	}
+}
+
+void Enemy::Hide(float x, float y)
+{
+	if (hideTimer > 0.0f && hideFlag == 0)
+	{
+		translation.y = 776;
+		translation.x = x;
+		hideTimer -= 3.0f;
+	}
+	else if (hideTimer <= 0.0f && hideFlag == 0)
+	{
+		hideFlag = 1;
+		hideTimer = 25.0f;
+	}
+
+	if (hideFlag == 1 && translation.y > 680)
+	{
+		translation.y -= 1.0f;
+	}
+	if (translation.y <= 680)
+	{
+		hideFlag = 0;
+		moveFlag = 2;
 	}
 }
 

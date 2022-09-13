@@ -17,7 +17,7 @@ private:
 	float gameTimer;
 	int gameCount;
 
-	int AnimetionTimer=8;
+	int AnimetionTimer = 8;
 	int AnimetionCount = 0;
 public:
 
@@ -29,5 +29,6 @@ public:
 
 	float GetgameTimer();
 	
+	int Reset();
 };
 

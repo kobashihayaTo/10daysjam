@@ -3,9 +3,10 @@
 #include "EnemyBullet.h"
 #include <math.h>
 enum class Phase2 {
-	Move,//移動
-	Attack,//攻撃
-	Leave//離脱
+	Move,	//移動
+	Attack,	//攻撃
+	Attack2,//攻撃2
+	Leave	//離脱
 };
 
 class Enemy2
@@ -31,6 +32,7 @@ public:
 
 	void Move(int Height, int Width);
 	void Attack(int Height, int Width);
+	void Attack2(int Height, int Width, float x, float y);
 	void Leave(int Height, int Width);
 	//フェーズ
 	Phase2 phase_ = Phase2::Move;
@@ -45,6 +47,8 @@ public:
 	//生存フラグ
 	int aliveFlag;
 
+	//行動タイマー
+	int moveTimer;;
 	//リスポンタイマー
 	float responTimer;
 	//減速し始めるタイマー

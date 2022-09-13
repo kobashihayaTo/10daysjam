@@ -53,6 +53,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int title = LoadGraph("TITLE.png");
 	int manual = LoadGraph("manual.png");
 	int gameclear = LoadGraph("gameclear.png");
+	int gameover = LoadGraph("gameover.png");
+	int Camel[3];
+	LoadDivGraph("dron.png", 3, 3, 1, 64, 64, Camel);
+
 	// ゲームループで使う変数の宣言
 	System* system_ = new System();
 	system_->Initialize();
@@ -77,6 +81,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	int HP;
 
+	int MAP;
+
+	int AnimetionTimer = 8;
+	int AnimetionCount = 1;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -113,6 +121,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				key & PAD_INPUT_1 && timerFlag == 1)
 			{
 				player_->Reset();
+				system_->Reset();
+
 
 				Scene = 1;
 				timerFlag = 0;
@@ -150,7 +160,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			enemy_->Update(player_->Gettrans_X(), player_->Gettrans_Y(), WIN_HEIGHT, WIN_WIDTH);
 
 			enemy2_->Update(WIN_HEIGHT, WIN_WIDTH, player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetRadius(), player_->GetFlag(), player_->GetHP_X());
+
 			map_->Update();
+
 			// 描画処理
 			map_->Draw(floor, second, pillar);
 			player_->Draw();
@@ -163,11 +175,27 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				Scene = 4;
 			}
 
+			MAP = map_->GetScrollX();
+			if (MAP == 7680)
+			{
+				Scene = 3;
+			}
 			break;
 
 
 		case 3://ゲームクリア
+			timer--;
+			if (timer < 0) {
+				timerFlag = 1;
+			}
 
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
+				key & PAD_INPUT_1 && timerFlag == 1)
+			{
+				Scene = 0;
+				timerFlag = 0;
+				timer = 60;
+			}
 			break;
 
 		case 4://ゲームオーバー
@@ -179,7 +207,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
 				key & PAD_INPUT_1 && timerFlag == 1)
 			{
-				player_->Reset();
 
 				Scene = 0;
 				timerFlag = 0;
@@ -200,8 +227,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 2://ゲーム
+			if (AnimetionTimer >= 0)
+			{
+				AnimetionTimer--;
+			}
+			if (AnimetionTimer <= 0)
+			{
+				AnimetionTimer = 8;
+				AnimetionCount += 1;
+				if (AnimetionCount > 2)
+				{
+					AnimetionCount = 0;
+				}
+			}
+			DrawGraph(WIN_WIDTH / 2, 680, Camel[AnimetionCount], true);
 			player_->Draw();
 			system_->Draw(player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetHP_X());
+
+
 
 			break;
 
@@ -210,8 +253,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 4://ゲームオーバー
-			DrawBox(0, 0, 1280, 720, GetColor(255, 0, 0), true);
-			DrawFormatString(100, 120, GetColor(255, 255, 255), "Scene:%d", Scene);
+			DrawGraph(0, 0, gameover, true);
 			break;
 		}
 

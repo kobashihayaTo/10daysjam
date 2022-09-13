@@ -58,6 +58,11 @@ void Map::Draw(int floor, int second, int pillar)
 			}
 		}
 	}
-	DrawFormatString(600, 30, GetColor(255, 255, 255), "スクロール座標%d", ScrollX);
+	//DrawFormatString(600, 30, GetColor(255, 255, 255), "スクロール座標%d", ScrollX);
 #pragma endregion
+}
+
+int Map::GetScrollX()
+{
+	return ScrollX;
 }

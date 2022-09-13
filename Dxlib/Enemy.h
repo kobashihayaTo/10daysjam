@@ -35,6 +35,8 @@ public:
 	/// <param name="y"></param>
 	void Move(float x, float y);
 	void Attack(float x, float y);
+	void Attack2(float x, float y);
+	void Hide(float x, float y);
 	void Leave(float x, float y);
 
 	VECTOR GetTranslation() { return translation; }
@@ -50,8 +52,16 @@ private:
 	int aliveFlag;
 	//移動フラグ
 	int moveFlag;
+	//ジャンプフラグ
+	int jumpFlag;
+	//隠れるフラグ
+	int hideFlag;
+	//隠れるタイマー
+	float hideTimer;
 	//敵発生タイマー
 	float responTimer;
+	//ジャンプタイマー
+	float jumpTimer;
 	//移動タイマー
 	float moveTimer;
 
@@ -62,5 +72,4 @@ private:
 	int HP = 200;
 
 	System* system_ = new System();
-	Player* player_ = new Player();
 };

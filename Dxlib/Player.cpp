@@ -1,9 +1,10 @@
 #include "Player.h"
+#define PI 3.14f
 
 void Player::Initialize()
 {
 	translation.x = 100;
-	translation.y = 680;
+	translation.y = 660;
 	translation.z = 0.0f;
 
 	
@@ -12,6 +13,7 @@ void Player::Initialize()
 	score_notation = LoadGraph("score.png", true);
 	LoadDivGraph("Player.png", 3, 3, 1, 64, 64, player_);
 	player_jump = LoadGraph("Playerjump.png", true);
+	Bullet_ = LoadGraph("Bullet.png", true);
 }
 
 void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int scrollX)
@@ -84,15 +86,14 @@ void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int s
 
 void Player::Draw()
 {
-	/*DrawBox((int)(translation.x + Playerradius), (int)(translation.y + Playerradius), (int)(translation.x - Playerradius), (int)(translation.y - Playerradius), GetColor(255, 255, 255), true);*/
-
+	
 	if (Rflag == true)
 	{
-		DrawGraph(translation.x,translation.y, player_[AnimetionCount], true);
+		DrawGraph(translation.x + 32, translation.y, player_[AnimetionCount], true);
 	}
 	if (Lflag == true)
 	{
-		DrawTurnGraph(translation.x, translation.y, player_[AnimetionCount], true);
+		DrawTurnGraph(translation.x - 32, translation.y, player_[AnimetionCount], true);
 	}
 	if (Uflag == true)
 	{
@@ -114,7 +115,8 @@ void Player::Draw()
 			if (isShot_Right[i] == 1)
 			{
 				shot_Right_X[i] += 20;
-				DrawCircle((int)(shot_Right_X[i] + Bullet_radius), (int)( shot_Right_Y[i]+32), Bullet_radius, GetColor(255, 0, 0), true);
+				DrawGraph((int)(shot_Right_X[i] + Bullet_radius), (int)(shot_Right_Y[i]+16),Bullet_,true);
+				//DrawCircle((int)(shot_Right_X[i] + Bullet_radius), (int)( shot_Right_Y[i]+32), Bullet_radius, GetColor(255, 0, 0), true);
 			}
 			if (shot_Right_X[i] > 1280)
 			{
@@ -130,7 +132,8 @@ void Player::Draw()
 			if (isShot_Left[i] == 1)
 			{
 				shot_Left_X[i] -= 20;
-				DrawCircle((int)(shot_Left_X[i] + Bullet_radius), (int)(shot_Left_Y[i]+32), Bullet_radius, GetColor(255, 0, 0), true);
+				DrawTurnGraph((int)(shot_Left_X[i] + Bullet_radius), (int)(shot_Left_Y[i] + 16), Bullet_, true);
+				/*DrawCircle((int)(shot_Left_X[i] + Bullet_radius), (int)(shot_Left_Y[i]+32), Bullet_radius, GetColor(255, 0, 0), true);*/
 			}
 			if (shot_Left_X[i] < 0)
 			{
@@ -146,7 +149,8 @@ void Player::Draw()
 			if (isShot_Up[i] == 1)
 			{
 				shot_Up_Y[i] -= 20;
-				DrawCircle(shot_Up_X[i] + 32, (int)(shot_Up_Y[i] + Bullet_radius), Bullet_radius, GetColor(255, 0, 0), true);
+				DrawRotaGraph(shot_Up_X[i] + 32, (int)(shot_Up_Y[i] + Bullet_radius), 1.0f, PI / 180*-90, Bullet_, TRUE);
+				/*DrawCircle(shot_Up_X[i] + 32, (int)(shot_Up_Y[i] + Bullet_radius), Bullet_radius, GetColor(255, 0, 0), true);*/
 			}
 			if (shot_Up_Y[i] < 0)
 			{
@@ -420,4 +424,17 @@ void Player::Reset()
 	bulletCooltime = 0;
 
 	HP_X = 200;
+
+	//タイマー
+	responTimer = 25.0f;
+
+	// ゲームループで使う変数の宣言
+	graphHandle[10] = {};
+
+	score = 0;
+	num = 0;
+	posX = 800;
+
+	AnimetionTimer = 8;
+	AnimetionCount = 1;
 }

@@ -6,6 +6,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw(int floor, int second, int pillar);
+	int GetScrollX();
 
 #pragma region 
 	int map[12][140] = {
@@ -40,6 +41,7 @@ public:
 	int CameraSpeed = 2;
 
 	int ScrollX = 0;
+
 
 #pragma endregion
 };
