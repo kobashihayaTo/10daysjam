@@ -5,10 +5,21 @@ void Player::Initialize()
 	translation.x = 100;
 	translation.y = 680;
 	translation.z = 0.0f;
+
+	
+	LoadDivGraph("score_num.png", 10, 10, 1, 64, 64, graphHandle);
+
+	score_notation = LoadGraph("score.png", true);
+	LoadDivGraph("Player.png", 3, 3, 1, 64, 64, player_);
+	player_jump = LoadGraph("Playerjump.png", true);
 }
 
 void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int scrollX)
 {
+	if (scrollX != 7680)
+	{
+		translation.x -= 0.5f;
+	}
 
 	X = VGet(translation.x, translation.y, translation.z);
 
@@ -62,9 +73,9 @@ void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int s
 			}
 		}
 	}
-	DrawFormatString(100, 60, GetColor(255, 255, 255), "taima-:%f", gameTimer);
-	DrawFormatString(100, 90, GetColor(255, 255, 255), "Attack_level:%f", Attack_level);
-	DrawFormatString(100, 120, GetColor(255, 255, 255), "Attack_level:%f", Attack_level);
+	//DrawFormatString(100, 60, GetColor(255, 255, 255), "taima-:%f", gameTimer);
+	//DrawFormatString(100, 90, GetColor(255, 255, 255), "Attack_level:%f", Attack_level);
+	//DrawFormatString(100, 120, GetColor(255, 255, 255), "Attack_level:%f", Attack_level);
 	//Dodge(keys, oldkeys);
 	Jamp(keys, oldkeys);
 	Attack(keys, oldkeys);
@@ -73,7 +84,20 @@ void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int s
 
 void Player::Draw()
 {
-	DrawBox((int)(translation.x + Playerradius), (int)(translation.y + Playerradius), (int)(translation.x - Playerradius), (int)(translation.y - Playerradius), GetColor(255, 255, 255), true);
+	/*DrawBox((int)(translation.x + Playerradius), (int)(translation.y + Playerradius), (int)(translation.x - Playerradius), (int)(translation.y - Playerradius), GetColor(255, 255, 255), true);*/
+
+	if (Rflag == true)
+	{
+		DrawGraph(translation.x,translation.y, player_[AnimetionCount], true);
+	}
+	if (Lflag == true)
+	{
+		DrawTurnGraph(translation.x, translation.y, player_[AnimetionCount], true);
+	}
+	if (Uflag == true)
+	{
+		DrawGraph(translation.x, translation.y, player_jump, true);
+	}
 
 	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPƒo[
 
@@ -90,7 +114,7 @@ void Player::Draw()
 			if (isShot_Right[i] == 1)
 			{
 				shot_Right_X[i] += 20;
-				DrawCircle((int)(shot_Right_X[i] + Bullet_radius), shot_Right_Y[i], Bullet_radius, GetColor(255, 0, 0), true);
+				DrawCircle((int)(shot_Right_X[i] + Bullet_radius), (int)( shot_Right_Y[i]+32), Bullet_radius, GetColor(255, 0, 0), true);
 			}
 			if (shot_Right_X[i] > 1280)
 			{
@@ -106,7 +130,7 @@ void Player::Draw()
 			if (isShot_Left[i] == 1)
 			{
 				shot_Left_X[i] -= 20;
-				DrawCircle((int)(shot_Left_X[i] + Bullet_radius), shot_Left_Y[i], Bullet_radius, GetColor(255, 0, 0), true);
+				DrawCircle((int)(shot_Left_X[i] + Bullet_radius), (int)(shot_Left_Y[i]+32), Bullet_radius, GetColor(255, 0, 0), true);
 			}
 			if (shot_Left_X[i] < 0)
 			{
@@ -122,7 +146,7 @@ void Player::Draw()
 			if (isShot_Up[i] == 1)
 			{
 				shot_Up_Y[i] -= 20;
-				DrawCircle(shot_Up_X[i], (int)(shot_Up_Y[i] + Bullet_radius), Bullet_radius, GetColor(255, 0, 0), true);
+				DrawCircle(shot_Up_X[i] + 32, (int)(shot_Up_Y[i] + Bullet_radius), Bullet_radius, GetColor(255, 0, 0), true);
 			}
 			if (shot_Up_Y[i] < 0)
 			{
@@ -130,6 +154,12 @@ void Player::Draw()
 			}
 		}
 	}
+
+	for (int i = 0; i < 7; i++)
+	{
+		DrawGraph(posX + 32 * i, 0, graphHandle[eachnum[i]], true);
+	}
+	DrawGraph(550, 0, score_notation, true);
 }
 
 void Player::Jamp(char* keys, char* oldkeys)
@@ -153,49 +183,6 @@ void Player::Jamp(char* keys, char* oldkeys)
 		translation.y = translation.y - jampChange;
 	}
 }
-
-//void Player::Dodge(char* keys, char* oldkeys)
-//{
-//	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-//
-//	if (keys[KEY_INPUT_C] == 1 && oldkeys[KEY_INPUT_C] == 0 && dflag == false ||
-//		key & PAD_INPUT_3 && dflag == false && dodge_timer == 0 && dodge_interval <= 0)
-//	{
-//		dflag = true;
-//		dodge_timer = 60;
-//		dodge_interval = 300;
-//	}
-//
-//	if (dflag == true)
-//	{
-//		dodge_timer--;
-//	}
-//	if (dflag == true && translation.z < 32)
-//	{
-//		translation.z += Bullet_radius;
-//		move = 0;
-//	}
-//
-//	if (dflag == true && dodge_timer <= 0)
-//	{
-//		translation.z = 0;
-//		move = 5;
-//		dodge_interval--;
-//	}
-//	if (dodge_interval <= 0)
-//	{
-//		dflag = false;
-//		dodge_timer = 0;
-//	}
-//
-//	if (key & PAD_INPUT_3)
-//	{
-//		DrawFormatString(100, 190, GetColor(255, 255, 255), "”½‰ž");
-//	}
-//	DrawFormatString(100, 210, GetColor(255, 255, 255), "translation:%f", translation.z);
-//	DrawFormatString(100, 230, GetColor(255, 255, 255), "dodge_timer:%d", dodge_timer);
-//	DrawFormatString(100, 250, GetColor(255, 255, 255), "dodge_interval:%d", dodge_interval);
-//}
 
 void Player::Attack(char* keys, char* oldkeys)
 {
@@ -254,6 +241,7 @@ void Player::Attack(char* keys, char* oldkeys)
 		bulletCooltime--;
 	}
 }
+
 void Player::Collision(int enemyFlag, float enemyX, float enemyY, float enemyradius)
 {
 	//ƒvƒŒƒCƒ„[‚Æ“G
@@ -298,10 +286,10 @@ void Player::Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyF
 				if (c >= a + b)
 				{
 					enemyFlag = 2;
+					score_();
 					HP -= Attack_level;
 					HP_X += 5;
 					isShot_Right[f] = 0;
-					break;
 				}
 			}
 
@@ -318,12 +306,11 @@ void Player::Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyF
 			float c = (enemy2Radius + Bullet_radius/*©’e”¼Œa*/) * (enemy2Radius + Bullet_radius/*©’e”¼Œa*/);
 			if (c >= a + b)
 			{
-
 				enemy2Flag = 2;
+				score_();
 				HP2 -= Attack_level;
 				HP_X += 5;
 				isShot_Up[i] = 0;
-				
 			}
 		}
 
@@ -342,16 +329,16 @@ void Player::Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyF
 				if (c >= a + b)
 				{
 					enemyFlag = 2;
+					score_();
 					HP -= Attack_level;
 					HP_X += 5;
 					isShot_Left[f] = 0;
-					
 				}
 			}
 		}
 	}
-	DrawFormatString(100, 270, GetColor(255, 255, 255), "HP:%d", HP);
-	DrawFormatString(100, 290, GetColor(255, 255, 255), " enemyFlag:%d", enemyFlag);
+	//DrawFormatString(100, 270, GetColor(255, 255, 255), "HP:%d", HP);
+	//DrawFormatString(100, 290, GetColor(255, 255, 255), " enemyFlag:%d", enemyFlag);
 }
 
 int Player::Gettrans_X() { return translation.x; }
@@ -369,6 +356,34 @@ int Player::GetBuffFlag() { return bufflag; }
 int Player::GetDeBuffFlag() { return debufflag; }
 
 float Player::GetRadius() { return Playerradius; }
+
+void Player::score_()
+{
+	score += 100;
+
+	num = score;
+
+
+	eachnum[0] = num / 1000000;
+	num = num % 1000000;
+
+	eachnum[1] = num / 100000;
+	num = num % 100000;
+
+	eachnum[2] = num / 10000;
+	num = num % 10000;
+
+	eachnum[3] = num / 1000;
+	num = num % 1000;
+
+	eachnum[4] = num / 100;
+	num = num % 100;
+
+	eachnum[5] = num / 10;
+	num = num % 10;
+
+	eachnum[6] = num;
+}
 
 void Player::Reset()
 {

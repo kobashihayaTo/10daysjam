@@ -49,6 +49,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int second = LoadGraph("Resource/second.png");
 	int pillar = LoadGraph("Resource/pillar.png");
 
+	int map = LoadGraph("map.png");
+	int title = LoadGraph("TITLE.png");
+	int manual = LoadGraph("manual.png");
+	int gameclear = LoadGraph("gameclear.png");
 	// ゲームループで使う変数の宣言
 	System* system_ = new System();
 	system_->Initialize();
@@ -133,6 +137,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 2://ゲーム
+			DrawGraph(0, 0, map, true);
+
 			system_->Update(player_->GetHP_X());
 
 			player_->Update(keys, oldkeys, system_->GetgameTimer(), system_->Getcount(), map_->ScrollX);
@@ -186,11 +192,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (Scene)
 		{
 		case 0://タイトル
-			DrawBox(0, 0, 1280, 720, GetColor(255, 255, 0), true);
+			DrawGraph(0, 0, title, true);
 			break;
 
 		case 1://操作説明
-			DrawBox(0, 0, 1280, 720, GetColor(255, 0, 0), true);
+			DrawGraph(0, 0, manual, true);
 			break;
 
 		case 2://ゲーム
@@ -200,7 +206,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 3://ゲームクリア
-
+			DrawGraph(0, 0, gameclear,true);
 			break;
 
 		case 4://ゲームオーバー
