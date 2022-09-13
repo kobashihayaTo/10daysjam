@@ -41,6 +41,7 @@ public:
 	float GetRadius() { return radius; }
 	int GetFlag() { return aliveFlag; }
 	int GetHP() { return HP; }
+
 private:
 	//“G‚Ìƒpƒ‰ƒ[ƒ^
 	VECTOR translation;

@@ -76,10 +76,12 @@ void Player::Draw()
 	DrawBox((int)(translation.x + Playerradius), (int)(translation.y + Playerradius), (int)(translation.x - Playerradius), (int)(translation.y - Playerradius), GetColor(255, 255, 255), true);
 
 	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPƒo[
+
 	if (HP_X > 200)
 	{
 		HP_X = 200;
 	}
+
 	DrawFormatString(100, 310, GetColor(255, 255, 255), "HP_X:%d", HP_X);
 	if (Rflag == true || Lflag == true || Uflag == true)
 	{
