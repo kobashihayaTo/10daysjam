@@ -57,6 +57,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int map = LoadGraph("map.png");
 	int title = LoadGraph("TITLE.png");
 	int manual = LoadGraph("manual.png");
+	int manual2 = LoadGraph("taitle2.png");
 	int gameclear = LoadGraph("gameclear.png");
 	int gameover = LoadGraph("gameover.png");
 	int Camel[3];
@@ -323,7 +324,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 2://ëÄçÏê‡ñæÇªÇÃÇQ
-
+			DrawGraph(0, 0, manual2, true);
 			break;
 		case 3://ÉQÅ[ÉÄ
 			if (CheckSoundMem(Game_BGM) == 0) {

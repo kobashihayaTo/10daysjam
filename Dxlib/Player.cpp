@@ -103,7 +103,7 @@ void Player::Draw()
 		DrawGraph(translation.x, translation.y, player_jump, true);
 	}
 
-	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 0, 255), true);//HPバー
+	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPバー
 
 	if (HP_X > 200)
 	{
