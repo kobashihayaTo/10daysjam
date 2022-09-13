@@ -7,13 +7,13 @@ void Player::Initialize()
 	translation.z = 0.0f;
 }
 
-void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
+void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int scrollX)
 {
 
 	X = VGet(translation.x, translation.y, translation.z);
 
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (keys[KEY_INPUT_RIGHT] == 1||key&PAD_INPUT_RIGHT)
+	if (keys[KEY_INPUT_RIGHT] == 1 || key & PAD_INPUT_RIGHT)
 	{
 		Uflag = false;
 		Lflag = false;
@@ -21,7 +21,7 @@ void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
 		translation.x += move;
 
 	}
-	if (keys[KEY_INPUT_LEFT] == 1|| key & PAD_INPUT_LEFT)
+	if (keys[KEY_INPUT_LEFT] == 1 || key & PAD_INPUT_LEFT)
 	{
 		Uflag = false;
 		Rflag = false;
@@ -51,14 +51,14 @@ void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
 				Attack_level = 0.5f;
 			}
 		}
-		if(HP_X < 92.5)
+		if (HP_X < 92.5)
 		{
 			debufflag = false;
-			bufflag =true;
+			bufflag = true;
 			Attack_level = 1.0f;
 			if (bufflag == true) {
 				//ÉoÉt
-				Attack_level =2.0f;
+				Attack_level = 2.0f;
 			}
 		}
 	}
@@ -73,10 +73,10 @@ void Player::Update(char* keys, char* oldkeys,float gameTimer,int Count)
 
 void Player::Draw()
 {
-	DrawBox((int)(translation.x+ radius), (int)(translation.y+ radius), (int)(translation.x - radius), (int)(translation.y - radius),GetColor(255, 255, 255), true);
-	
+	DrawBox((int)(translation.x + Playerradius), (int)(translation.y + Playerradius), (int)(translation.x - Playerradius), (int)(translation.y - Playerradius), GetColor(255, 255, 255), true);
+
 	DrawBox(15, 15, HP_X, HP_Y, GetColor(0, 255, 0), true);//HPÉoÅ[
-	
+
 
 	if (Rflag == true || Lflag == true || Uflag == true)
 	{
@@ -85,7 +85,7 @@ void Player::Draw()
 			if (isShot_Right[i] == 1)
 			{
 				shot_Right_X[i] += 20;
-				DrawCircle((int)(shot_Right_X[i] + radius), shot_Right_Y[i], Bullet_radius, GetColor(255, 0, 0), true);
+				DrawCircle((int)(shot_Right_X[i] + Bullet_radius), shot_Right_Y[i], Bullet_radius, GetColor(255, 0, 0), true);
 			}
 			if (shot_Right_X[i] > 1280)
 			{
@@ -101,7 +101,7 @@ void Player::Draw()
 			if (isShot_Left[i] == 1)
 			{
 				shot_Left_X[i] -= 20;
-				DrawCircle((int)(shot_Left_X[i] + radius), shot_Left_Y[i], Bullet_radius, GetColor(255, 0, 0), true);
+				DrawCircle((int)(shot_Left_X[i] + Bullet_radius), shot_Left_Y[i], Bullet_radius, GetColor(255, 0, 0), true);
 			}
 			if (shot_Left_X[i] < 0)
 			{
@@ -117,7 +117,7 @@ void Player::Draw()
 			if (isShot_Up[i] == 1)
 			{
 				shot_Up_Y[i] -= 20;
-				DrawCircle(shot_Up_X[i], (int)(shot_Up_Y[i] + radius), Bullet_radius, GetColor(255, 0, 0), true);
+				DrawCircle(shot_Up_X[i], (int)(shot_Up_Y[i] + Bullet_radius), Bullet_radius, GetColor(255, 0, 0), true);
 			}
 			if (shot_Up_Y[i] < 0)
 			{
@@ -141,11 +141,11 @@ void Player::Jamp(char* keys, char* oldkeys)
 		}
 		//--------------
 	}
-	if (keys[KEY_INPUT_UP] && jflag == false|| key & PAD_INPUT_2 && jflag == false )
+	if (keys[KEY_INPUT_UP] && jflag == false || key & PAD_INPUT_2 && jflag == false)
 	{
 		jflag = true;
 		y_prev = translation.y;
-		translation.y= translation.y - jampChange;
+		translation.y = translation.y - jampChange;
 	}
 }
 
@@ -153,11 +153,11 @@ void Player::Dodge(char* keys, char* oldkeys)
 {
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	if (keys[KEY_INPUT_C] == 1 &&oldkeys[KEY_INPUT_C]==0 && dflag == false ||
+	if (keys[KEY_INPUT_C] == 1 && oldkeys[KEY_INPUT_C] == 0 && dflag == false ||
 		key & PAD_INPUT_3 && dflag == false && dodge_timer == 0 && dodge_interval <= 0)
 	{
 		dflag = true;
-		dodge_timer = 300;
+		dodge_timer = 60;
 		dodge_interval = 300;
 	}
 
@@ -167,7 +167,7 @@ void Player::Dodge(char* keys, char* oldkeys)
 	}
 	if (dflag == true && translation.z < 32)
 	{
-		translation.z += radius;
+		translation.z += Bullet_radius;
 		move = 0;
 	}
 
@@ -195,7 +195,7 @@ void Player::Dodge(char* keys, char* oldkeys)
 void Player::Attack(char* keys, char* oldkeys)
 {
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Rflag == true|| 
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Rflag == true ||
 		key & PAD_INPUT_1 && bulletCooltime == 0 && Rflag == true)
 	{
 		for (int i = 0; i < BulletNum; i++) {
@@ -212,7 +212,7 @@ void Player::Attack(char* keys, char* oldkeys)
 		}
 	}
 
-	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Lflag == true||
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Lflag == true ||
 		key & PAD_INPUT_1 && bulletCooltime == 0 && Lflag == true)
 	{
 		for (int i = 0; i < BulletNum; i++) {
@@ -228,7 +228,7 @@ void Player::Attack(char* keys, char* oldkeys)
 			}
 		}
 	}
-	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Uflag == true||
+	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Uflag == true ||
 		key & PAD_INPUT_1 && bulletCooltime == 0 && Uflag == true)
 	{
 		for (int i = 0; i < BulletNum; i++) {
@@ -249,6 +249,99 @@ void Player::Attack(char* keys, char* oldkeys)
 		bulletCooltime--;
 	}
 }
+void Player::Collision(int enemyFlag, float enemyX, float enemyY, float enemyradius)
+{
+	//ÉvÉåÉCÉÑÅ[Ç∆ìG
+
+	if (aliveFlag == 1 && enemyFlag == 1)
+	{
+		float a = (translation.x - enemyX) * (translation.x - enemyX);
+		float b = (translation.y - enemyY) * (translation.y - enemyY);
+		float c = (Playerradius + enemyradius) * (Playerradius + enemyradius);
+		if (c >= a + b)
+		{
+			HP_ -= 1;
+			aliveFlag = 2;
+
+		}
+	}
+	//ÉäÉXÉ|Éìèàóù
+	if (aliveFlag == 2)
+	{
+		responTimer -= 0.5f;
+		if (responTimer <= 0.0f)
+		{
+			responTimer = 25.0f;
+			aliveFlag = 1;
+		}
+	}
+}
+
+void Player::Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyFlag, float enemy2X, float enemy2Y, int enemy2Radius, int enemy2Flag,
+	int HP, int HP2)
+{
+	//ìG1Ç∆ÉvÉåÉCÉÑÅ[íe
+	for (int i = 0; i < 6; i++)
+	{
+		for (int f = 0; f < 50; f++)
+		{
+			if (enemyFlag == 1 && isShot_Right[f] == 1)
+			{
+				float a = (enemyX - shot_Right_X[f]) * (enemyX - shot_Right_X[f]);
+				float b = (enemyY - shot_Right_Y[f]) * (enemyY - shot_Right_Y[f]);
+				float c = (enemyRadius + Bullet_radius/*Å©íeîºåa*/) * (enemyRadius + Bullet_radius/*Å©íeîºåa*/);
+				if (c >= a + b)
+				{
+					HP -= 1;
+					HP_ += 100;
+					enemyFlag = 2;
+					isShot_Right[f] = 0;
+				}
+			}
+		}
+	}
+
+	//ìG2Ç∆ÉvÉåÅ[ÉÑÅ[íe
+	for (int i = 0; i < 50; i++)
+	{
+		if (enemy2Flag == 1 && isShot_Up[i] == 1)
+		{
+			float a = (enemy2X - shot_Up_X[i]) * (enemy2X - shot_Up_X[i]);
+			float b = (enemy2Y - shot_Up_Y[i]) * (enemy2Y - shot_Up_Y[i]);
+			float c = (enemy2Radius + Bullet_radius/*Å©íeîºåa*/) * (enemy2Radius + Bullet_radius/*Å©íeîºåa*/);
+			if (c >= a + b)
+			{
+				HP2 -= 1;
+				HP_ += 100;
+				enemy2Flag = 2;
+				isShot_Up[i] = 0;
+			}
+		}
+	}
+
+	//ìG1Ç∆ÉvÉåÉCÉÑÅ[íe
+	for (int i = 0; i < 6; i++)
+	{
+		for (int f = 0; f < 50; f++)
+		{
+			if (enemyFlag == 1 && isShot_Left[f] == 1)
+			{
+				float a = (enemyX - shot_Left_X[f]) * (enemyX - shot_Left_X[f]);
+				float b = (enemyY - shot_Left_Y[f]) * (enemyY - shot_Left_Y[f]);
+				float c = (enemyRadius + Bullet_radius/*Å©íeîºåa*/) * (enemyRadius + Bullet_radius/*Å©íeîºåa*/);
+				if (c >= a + b)
+				{
+					HP -= 1;
+					HP_ += 1;
+					enemyFlag = 2;
+					isShot_Left[f] = 0;
+				}
+			}
+		}
+	}
+
+
+}
 
 int Player::Gettrans_X() { return translation.x; }
 
@@ -256,9 +349,15 @@ int Player::Gettrans_Y() { return translation.y; }
 
 int Player::GetHP_X() { return HP_X; }
 
-int Player::GetFlag_b(){return bufflag;}
+int Player::GetHP() { return HP_; }
 
-int Player::GetFlag_de(){return debufflag;}
+int Player::GetFlag() { return aliveFlag; }
+
+int Player::GetBuffFlag() { return bufflag; }
+
+int Player::GetDeBuffFlag() { return debufflag; }
+
+float Player::GetRadius() { return Playerradius; }
 
 void Player::Reset()
 {
@@ -296,5 +395,3 @@ void Player::Reset()
 
 	HP_X = 200;
 }
-
-

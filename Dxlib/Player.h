@@ -1,9 +1,9 @@
 #pragma once
 #include "DxLib.h"
 #include "math.h"
+#include "Map.h"
 #include "vector"
 
-#include "PlayerBullet.h"
 class Player
 {
 public:
@@ -17,7 +17,7 @@ public:
 	///<summary>
 	///更新
 	///</summary>
-	void Update(char*keys,char*oldkeys,float gameTimer,int Count);
+	void Update(char* keys, char* oldkeys, float gameTimer, int Count, int scrollX);
 
 	///<summary>
 	///描画
@@ -38,45 +38,57 @@ public:
 	/// </summary>
 	void Attack(char* keys, char* oldkeys);
 
+	void Collision(int enemyFlag, float enemyX, float enemyY, float enemyradius);
+
+	void Oncollision(float enemyX, float enemyY, int enemyRadius, int enemyFlag, float enemy2X, float enemy2Y, int enemy2Radius, int enemy2Flag,
+		int HP, int HP2);
 public:
-
-
 	int Gettrans_X();
 
 	int Gettrans_Y();
 
+	int GetHP();
+
 	int GetHP_X();
 
-	int GetFlag_b();
+	int GetBuffFlag();
 
-	int GetFlag_de();
+	int GetDeBuffFlag();
+
+	int GetFlag();
 
 	void Reset();
 
+	float GetRadius();
+	//void SetBullet() {
+	//	bullet_->Update();
+	//}
 
 	VECTOR X;
 
-	
-
+	Map* map = new Map();
 private:
 
 	VECTOR translation;
 
-	PlayerBullet* bullet_;
 	//プレイヤー
-	float radius = 16.0f;
+	float Playerradius = 32.0f;
 	float move = 5;
+	float GetPlayertrans_ = 100.0f;
 
-	int Bullet_radius = 10;
+	int dodge_timer = 5;
+	int	dodge_interval = 120;
+
+	int Bullet_radius = 16;
+	int aliveFlag = 1;
 	//--------------------
-	//回避
-	int dodge_timer = 0;
-	int dodge_interval = 0;
+
 	//ジャンプ---------------------
 	bool jflag = false;
 	float y_temp = 0;
 	float y_prev = 0;
 	int jampChange = 25;
+
 
 	bool dflag = false;
 	//----------------------------
@@ -95,7 +107,7 @@ private:
 
 	float Bulletmove_X = 0;
 	float Bulletmove_Y = 0;
-	
+
 	static const int BulletNum = 50;
 
 	int shot_Right_X[BulletNum];
@@ -112,10 +124,16 @@ private:
 	int bulletCooltime = 0;
 	//---------------------------
 
+
+	int memory_left_Y;
+
 	int HP_X = 200;
 	int HP_Y = 48;
 
 	int HP_;
+	int BUF[3];
+	int DEBUF[3];
 
+	//タイマー
+	float responTimer = 25.0f;
 };
-

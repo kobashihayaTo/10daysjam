@@ -1,17 +1,21 @@
 #include "DxLib.h"
 #include "Player.h"
+#include "Enemy.h"
+#include "Enemy2.h"
 #include "System.h"
+#include "Map.h"
+
 // ウィンドウのタイトルに表示する文字列
-const char TITLE[] = "LE2C_13_コバシ_ハヤト";
+const char TITLE[] = "";
 
 // ウィンドウ横幅
 const int WIN_WIDTH = 1280;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 720;
+const int WIN_HEIGHT = 768;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
-                   _In_ int nCmdShow) {
+	_In_ int nCmdShow) {
 	// ウィンドウモードに設定
 	ChangeWindowMode(TRUE);
 
@@ -39,32 +43,50 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// 画像などのリソースデータの変数宣言と読み込み
 
-	// ゲームループで使う変数の宣言
-	Player* player_ = new Player();
-	player_->Initialize();
 
+	// ゲームループで使う変数の宣言
+	int floor = LoadGraph("Resource/floor.png");
+	int second = LoadGraph("Resource/second.png");
+	int pillar = LoadGraph("Resource/pillar.png");
+
+	// ゲームループで使う変数の宣言
 	System* system_ = new System();
 	system_->Initialize();
 
+	Map* map_ = new Map();
+	map_->Initialize();
+
+	Player* player_ = new Player();
+	player_->Initialize();
+
+	Enemy* enemy_ = new Enemy();
+	enemy_->Initialize();
+
+	Enemy2* enemy2_ = new Enemy2();
+	enemy2_->Initialize(WIN_HEIGHT, WIN_WIDTH);
+
 	//シーン用変数
 	int Scene = 0;
-	
-	int timer = 20;
+
+	int timer = 120;
 	int timerFlag = 0;
-	//プレイヤーのHP
+
 	int HP;
 
-	
-
 	// 最新のキーボード情報用
-	char keys[256] = {0};
+	char keys[256] = { 0 };
+
 
 	// 1ループ(フレーム)前のキーボード情報
-	char oldkeys[256] = {0};
+	char oldkeys[256] = { 0 };
 
 	// ゲームループ
 	while (true) {
 		// 最新のキーボード情報だったものは1フレーム前のキーボード情報として保存
+		for (int i = 0; i < 256; i++)
+		{
+			oldkeys[i] = keys[i];
+		}
 		// 最新のキーボード情報を取得
 		GetHitKeyStateAll(keys);
 
@@ -73,39 +95,63 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
+
 		int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 		switch (Scene)
 		{
 		case 0://タイトル
-			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && Scene == 0 ||
-				key & PAD_INPUT_1 && Scene == 0)
-			{
-				Scene = 1;
+			timer--;
+			if (timer < 0) {
+				timerFlag = 1;
 			}
-			break;
-		case 1://操作説明
+
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
 				key & PAD_INPUT_1 && timerFlag == 1)
 			{
 				player_->Reset();
 
-				Scene = 2;
+				Scene = 1;
 				timerFlag = 0;
+				timer = 120;
 			}
+			break;
+		case 1://操作説明
 			timer--;
 			if (timer < 0) {
 				timerFlag = 1;
 			}
+
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
+				key & PAD_INPUT_1 && timerFlag == 1)
+			{
+
+				Scene = 2;
+				timerFlag = 0;
+				timer = 120;
+			}
+
 			break;
 
 		case 2://ゲーム
-			player_->Update(keys, oldkeys, system_->GetgameTimer(), system_->Getcount());
 			system_->Update(player_->GetHP_X());
+			player_->Update(keys, oldkeys, system_->GetgameTimer(), system_->Getcount(), map_->ScrollX);
+			player_->Collision(enemy_->GetFlag(), enemy_->GetTranslation().x, enemy_->GetTranslation().y, enemy_->GetRadius());
+			player_->Oncollision(enemy_->GetTranslation().x, enemy_->GetTranslation().y, enemy_->GetRadius(), enemy_->GetFlag(), enemy2_->translation.x, enemy2_->translation.y, enemy2_->radius, enemy2_->aliveFlag, enemy_->GetHP(), enemy2_->HP);
+			enemy_->Update(player_->Gettrans_X(), player_->Gettrans_Y(), WIN_HEIGHT, WIN_WIDTH);
+			enemy2_->Update(WIN_HEIGHT, WIN_WIDTH, player_->Gettrans_X(), player_->Gettrans_Y(), player_->GetRadius(), player_->GetFlag(), player_->GetHP());
+			map_->Update();
+			// 描画処理
+			map_->Draw(floor, second, pillar);
+			player_->Draw();
+			enemy_->Draw();
+			enemy2_->Draw();
+
 			HP = player_->GetHP_X();
 			if (HP <= 10)
 			{
 				Scene = 4;
 			}
+
 			break;
 
 
@@ -114,10 +160,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 4://ゲームオーバー
+			timer--;
+			if (timer < 0) {
+				timerFlag = 1;
+			}
 
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 && timerFlag == 1 ||
+				key & PAD_INPUT_1 && timerFlag == 1)
+			{
+				player_->Reset();
+
+				Scene = 0;
+				timerFlag = 0;
+				timer = 120;
+			}
 			break;
 		}
-	
+
 		// 描画処理
 		switch (Scene)
 		{
@@ -136,7 +195,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 3://ゲームクリア
-			
+
 			break;
 
 		case 4://ゲームオーバー
@@ -144,6 +203,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			DrawFormatString(100, 120, GetColor(255, 255, 255), "Scene:%d", Scene);
 			break;
 		}
+
+		// 描画処理
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
