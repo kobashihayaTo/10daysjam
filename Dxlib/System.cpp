@@ -91,7 +91,7 @@ float System::GetgameTimer()
 	return gameTimer;
 }
 
-int System::Reset()
+void System::Reset()
 {
 	gameTimer = 0.0f;
 	gameCount = 0;

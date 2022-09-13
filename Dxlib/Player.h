@@ -35,6 +35,7 @@ public:
 	///‰ñ”ğ
 	///</summary>
 	void Dodge(char* keys, char* oldkeys);
+
 	/// <summary>
 	/// UŒ‚
 	/// </summary>
@@ -157,5 +158,5 @@ private:
 	int player_jump;
 
 	int Bullet_;
-	
+	int Bullet_SE;
 };

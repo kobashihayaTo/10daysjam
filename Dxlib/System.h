@@ -29,6 +29,6 @@ public:
 
 	float GetgameTimer();
 	
-	int Reset();
+	void Reset();
 };
 

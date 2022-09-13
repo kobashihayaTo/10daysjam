@@ -14,6 +14,9 @@ void Player::Initialize()
 	LoadDivGraph("Player.png", 3, 3, 1, 64, 64, player_);
 	player_jump = LoadGraph("Playerjump.png", true);
 	Bullet_ = LoadGraph("Bullet.png", true);
+
+	Bullet_SE = LoadSoundMem("åùèeÇåÇÇ¬.mp3");
+	ChangeVolumeSoundMem(255 * 35 / 100, Bullet_SE);
 }
 
 void Player::Update(char* keys, char* oldkeys, float gameTimer, int Count, int scrollX)
@@ -191,9 +194,12 @@ void Player::Jamp(char* keys, char* oldkeys)
 void Player::Attack(char* keys, char* oldkeys)
 {
 	int key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+
 	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Rflag == true ||
 		key & PAD_INPUT_1 && bulletCooltime == 0 && Rflag == true)
 	{
+		PlaySoundMem(Bullet_SE, DX_PLAYTYPE_BACK);
+
 		for (int i = 0; i < BulletNum; i++) {
 			Bulletmove_X = translation.x;
 			Bulletmove_Y = translation.y;
@@ -211,6 +217,7 @@ void Player::Attack(char* keys, char* oldkeys)
 	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Lflag == true ||
 		key & PAD_INPUT_1 && bulletCooltime == 0 && Lflag == true)
 	{
+		PlaySoundMem(Bullet_SE, DX_PLAYTYPE_BACK);
 		for (int i = 0; i < BulletNum; i++) {
 			Bulletmove_X = translation.x;
 			Bulletmove_Y = translation.y;
@@ -227,6 +234,7 @@ void Player::Attack(char* keys, char* oldkeys)
 	if (keys[KEY_INPUT_SPACE] == 1 && bulletCooltime == 0 && Uflag == true ||
 		key & PAD_INPUT_1 && bulletCooltime == 0 && Uflag == true)
 	{
+		PlaySoundMem(Bullet_SE, DX_PLAYTYPE_BACK);
 		for (int i = 0; i < BulletNum; i++) {
 			Bulletmove_X = translation.x;
 			Bulletmove_Y = translation.y;
